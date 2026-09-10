@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Mikit Multimedia · Espacio Digital Interactivo · Fase 1"/>
+  <title>Mikit Multimedia</title>
+
+  <!-- 1 request externo: tipografía Poppins para la marca -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Reset & Base ────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:  #3AB5F7; /* Cyan */
+      --hot:     #FA61A2; /* Rosa */
+      --purple:  #9059C8; /* Morado */
+      --yellow:  #F2C94C; /* Amarillo */
+      --bg:      #ffffff; /* Fondo Blanco */
+      --text:    #2D2D2D; /* Texto oscuro */
+      --font:    'Poppins', sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      font-family: var(--font);
+    }
+
+    /* ─── Canvas World ────────────────────────────── */
+    #world {
+      position: fixed;
+      inset: 0;
+      display: block;
+      cursor: none;                   /* Cursor personalizado via crosshair en canvas */
+    }
+
+    /* ─── Splash / Entrada ────────────────────────── */
+    #splash {
+      position: fixed; inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      background: var(--bg);
+      color: var(--text);
+      z-index: 200;
+      transition: opacity 0.6s ease;
+      padding: 24px;
+    }
+
+    .splash-logo-img {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    .splash-sub {
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .splash-divider {
+      width: 180px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    #enter-btn {
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      padding: 14px 42px;
+      cursor: pointer;
+      text-transform: uppercase;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(58, 181, 247, 0.15);
+    }
+    #enter-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(58, 181, 247, 0.4);
+    }
+
+    .splash-hint {
+      font-size: 0.72rem;
+      color: #718096;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    /* ─── Lock Hint ───────────────────────────────── */
+    #lock-hint {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.94);
+      padding: 10px 24px;
+      border: 1px solid rgba(58, 181, 247, 0.4);
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      z-index: 100;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    /* ─── Toast Notification ──────────────────────── */
+    #notification {
+      position: fixed;
+      top: 24px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.98);
+      border: 2px solid var(--accent);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+      padding: 12px 30px;
+      border-radius: 8px;
+      z-index: 150;
+      opacity: 0;
+      transition: opacity 0.35s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    #notification.show { opacity: 1; }
+
+    /* ─── Transition Overlay ──────────────────────── */
+    #transition-overlay {
+      position: fixed; inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 180;
+      transition: opacity 0.45s ease;
+    }
+
+    /* ─── Milkit Modal Overlay (Light Theme) ──────── */
+    #markos-modal {
+      position: fixed; inset: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(14px);
+      z-index: 300;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      overflow-y: auto;
+      color: var(--text);
+      padding: 40px 24px;
+    }
+    #markos-modal.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 1;
+    }
+    .modal-container {
+      max-width: 1040px;
+      width: 100%;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 18px;
+    }
+    .modal-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .badge-b2b {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      border: 1px solid rgba(58, 181, 247, 0.4);
+      padding: 4px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(58, 181, 247, 0.08);
+    }
+    .modal-close-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .modal-close-btn:hover {
+      background: var(--hot);
+      color: #fff;
+      border-color: var(--hot);
+      box-shadow: 0 4px 14px rgba(250, 97, 162, 0.3);
+    }
+    .hero-pitch h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .hero-pitch h1 span {
+      color: var(--accent);
+      text-shadow: none;
+    }
+    .hero-pitch p.lead {
+      font-size: 1.05rem;
+      color: #4a5568;
+      line-height: 1.6;
+      max-width: 860px;
+    }
+    .grid-engines {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .engine-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+    }
+    .engine-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    }
+    .engine-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .engine-card .engine-sub {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #718096;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+    }
+    .engine-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #4a5568;
+      line-height: 1.45;
+    }
+    .engine-card ul li::before {
+      content: '▶ ';
+      color: var(--accent);
+      font-size: 0.7rem;
+    }
+    .telemetry-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 22px;
+    }
+    .tele-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .tele-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+    .tele-lbl {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #718096;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .comparison-section {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 28px;
+    }
+    .comparison-section h2 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 680px) {
+      .comparison-grid { grid-template-columns: 1fr; }
+    }
+    .comp-col h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .comp-col.bad h4 { color: #e53e3e; }
+    .comp-col.good h4 { color: #319795; }
+    .comp-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #4a5568;
+    }
+    .comp-col.bad ul li::before { content: '✕ '; color: #e53e3e; font-weight: bold; }
+    .comp-col.good ul li::before { content: '✓ '; color: #319795; font-weight: bold; }
+    .cta-banner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      background: #f0f9ff;
+      border: 1px solid rgba(58, 181, 247, 0.4);
+      border-radius: 10px;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .cta-banner h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .cta-banner p {
+      max-width: 620px;
+      font-size: 0.98rem;
+      color: #4a5568;
+      line-height: 1.6;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .btn-primary-cta {
+      background: var(--accent);
+      border: none;
+      color: #ffffff;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 14px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(58, 181, 247, 0.35);
+      transition: all 0.2s;
+    }
+    .btn-primary-cta:hover {
+      background: #259fe2;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(58, 181, 247, 0.45);
+    }
+    .btn-secondary-cta {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 14px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary-cta:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    /* ─── Mobile Touch Controls ──────────────────── */
+    #mobile-controls {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 120;
+      display: none;
+    }
+    body.is-touch #mobile-controls {
+      display: block;
+    }
+    .touch-btn {
+      position: absolute;
+      pointer-events: auto;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1.5px solid rgba(58, 181, 247, 0.45);
+      color: var(--text);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(8px);
+    }
+    .touch-btn:active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    #touch-fwd   { bottom: 95px; left: 65px; width: 50px; height: 50px; }
+    #touch-back  { bottom: 25px; left: 65px; width: 50px; height: 50px; }
+    #touch-left  { bottom: 60px; left: 15px; width: 48px; height: 48px; }
+    #touch-right { bottom: 60px; left: 115px; width: 48px; height: 48px; }
+    #touch-interact {
+      position: absolute;
+      bottom: 35px; right: 20px;
+      padding: 14px 20px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid var(--hot);
+      font-family: var(--font);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--hot);
+      pointer-events: auto;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      box-shadow: 0 4px 16px rgba(250, 97, 162, 0.25);
+    }
+    #touch-interact:active {
+      background: var(--hot);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ WORLD CANVAS (motor de raycasting) ════ -->
+  <canvas id="world"></canvas>
+
+  <!-- ═══ SPLASH ════════════════════════════════ -->
+  <div id="splash">
+    <img src="logomilkit.png" alt="Milkit Soluciones Multimedia" class="splash-logo-img">
+    <p class="splash-sub">Fase 1 · Salón Home</p>
+    <div class="splash-divider"></div>
+    <button id="enter-btn">Entrar al Espacio</button>
+    <p class="splash-hint">W A S D o Touch · Arrastra para girar · Click para explorar</p>
+  </div>
+
+  <!-- ═══ UI ELEMENTS ═══════════════════════════ -->
+  <div id="lock-hint">Click para capturar el mouse</div>
+  <div id="notification"></div>
+  <div id="transition-overlay"></div>
+
+  <!-- ═══ CONTROLES TOUCH MÓVIL ══════════════════ -->
+  <div id="mobile-controls">
+    <div id="touch-fwd" class="touch-btn">▲</div>
+    <div id="touch-back" class="touch-btn">▼</div>
+    <div id="touch-left" class="touch-btn">◀</div>
+    <div id="touch-right" class="touch-btn">▶</div>
+    <button id="touch-interact">◉ EXPLORAR</button>
+  </div>
+
+  <!-- ═══ FASE 2: ENTORNO AISLADO MILKIT ═════════ -->
+  <div id="markos-modal">
+    <div class="modal-container">
+      
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="badge-b2b" style="background:rgba(58,181,247,0.15); border-color:#3AB5F7; color:#3AB5F7;">Milkit · Soluciones Creativas</span>
+          <span style="color:#FA61A2; font-size:0.75rem; letter-spacing:0.15em;">● PORTAFOLIO LIVE</span>
+        </div>
+        <button id="close-modal-btn" class="modal-close-btn">[ ✕ VOLVER AL SALÓN ]</button>
+      </div>
+
+      <div class="hero-pitch">
+        <h1>Tu marca no necesita más likes.<br><span style="color:#3AB5F7;">Necesita resultados.</span></h1>
+        <p class="lead">
+          Somos Milkit Multimedia: una agencia de soluciones creativas que combina estrategia de marca, producción audiovisual y tecnología digital para convertir tu presencia en un activo comercial real.
+          <strong style="color:#FA61A2;">Diseñamos experiencias que venden.</strong>
+        </p>
+      </div>
+
+      <!-- Telemetry Strip -->
+      <div class="telemetry-strip">
+        <div class="tele-stat">
+          <div class="tele-val" id="stat-pipelines" style="color:#3AB5F7;">14</div>
+          <div class="tele-lbl">Proyectos Activos</div>
+        </div>
+        <div class="tele-stat">
+          <div class="tele-val" id="stat-speed" style="color:#FA61A2;">48h</div>
+          <div class="tele-lbl">Entrega Express</div>
+        </div>
+        <div class="tele-stat">
+          <div class="tele-val" id="stat-cac" style="color:#9059C8;">+320%</div>
+          <div class="tele-lbl">Alcance Orgánico</div>
+        </div>
+        <div class="tele-stat">
+          <div class="tele-val" id="stat-health" style="color:#F2C94C;">100%</div>
+          <div class="tele-lbl">Clientes Satisfechos</div>
+        </div>
+      </div>
+
+      <!-- 4 Core Services -->
+      <div class="grid-engines">
+        
+        <div class="engine-card" style="border-color:rgba(58,181,247,0.4);">
+          <div class="engine-sub">Servicio 01</div>
+          <h3 style="color:#3AB5F7;">⚙ Estrategia &amp; Branding</h3>
+          <ul>
+            <li><strong>Identidad Visual:</strong> Logotipo, paleta, tipografía y manual de marca que comunica quién eres antes de decir una palabra.</li>
+            <li><strong>Posicionamiento:</strong> Definimos tu nicho, tu voz y tu diferenciador competitivo con datos reales del mercado.</li>
+            <li><strong>Campañas 360°:</strong> De la idea al lanzamiento coordinado en todos los canales relevantes para tu audiencia.</li>
+          </ul>
+        </div>
+
+        <div class="engine-card" style="border-color:rgba(250,97,162,0.4);">
+          <div class="engine-sub">Servicio 02</div>
+          <h3 style="color:#FA61A2;">◉ SEO · Emailing · ADS</h3>
+          <ul>
+            <li><strong>Google &amp; Meta ADS:</strong> Campañas de pago optimizadas para conversión real, no solo clics.</li>
+            <li><strong>Email Marketing:</strong> Flows automatizados de nutrición que convierten suscriptores en clientes.</li>
+            <li><strong>Posicionamiento Orgánico:</strong> SEO técnico y de contenido para dominar los resultados que importan.</li>
+          </ul>
+        </div>
+
+        <div class="engine-card" style="border-color:rgba(144,89,200,0.4);">
+          <div class="engine-sub">Servicio 03</div>
+          <h3 style="color:#9059C8;">◎ Diseño &amp; Motion</h3>
+          <ul>
+            <li><strong>Producción Audiovisual:</strong> Video corporativo, reels, spots y documentales con calidad de emisión.</li>
+            <li><strong>Motion Graphics:</strong> Animaciones e infografías que comunican ideas complejas en segundos.</li>
+            <li><strong>Fotografía de Producto:</strong> Imagen profesional que aumenta la tasa de conversión en e-commerce.</li>
+          </ul>
+        </div>
+
+        <div class="engine-card" style="border-color:rgba(242,201,76,0.4);">
+          <div class="engine-sub">Servicio 04</div>
+          <h3 style="color:#F2C94C;">◈ Streaming · Apps · UX/UI</h3>
+          <ul>
+            <li><strong>Desarrollo Front-End:</strong> Interfaces React modernas, rápidas y optimizadas para conversión.</li>
+            <li><strong>Live Streaming:</strong> Producción y distribución de transmisiones en vivo para eventos y lanzamientos.</li>
+            <li><strong>UX/UI Design:</strong> Diseño de experiencias digitales centradas en el usuario que guían hacia la acción.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Comparison Section -->
+      <div class="comparison-section">
+        <h2>Del contenido al resultado: La diferencia Milkit</h2>
+        <div class="comparison-grid">
+          <div class="comp-col bad">
+            <h4>Agencia Genérica / Freelancer Aislado</h4>
+            <ul>
+              <li>Entregables inconsistentes sin visión de marca unificada</li>
+              <li>Falta de coordinación entre diseño, contenido y pauta</li>
+              <li>Métricas de vanidad sin correlación con ventas reales</li>
+              <li>Dependencia de un solo recurso con alta rotación</li>
+            </ul>
+          </div>
+          <div class="comp-col good">
+            <h4>Milkit · Equipo Multimedia Integrado</h4>
+            <ul>
+              <li>Estrategia + diseño + producción + distribución bajo un solo techo</li>
+              <li>Identidad coherente en todos los puntos de contacto</li>
+              <li>Reportes de impacto comercial medible y trazable</li>
+              <li>Escalabilidad: desde startups hasta operaciones regionales</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Banner -->
+      <div class="cta-banner" style="border-color:rgba(58,181,247,0.3); background:rgba(58,181,247,0.06);">
+        <h2>Hablemos de tu proyecto</h2>
+        <p>Cuéntanos qué necesitas. En 24 horas tienes una propuesta concreta, sin relleno y sin letra pequeña.</p>
+        <div class="cta-buttons">
+          <button id="cta-demo-btn" class="btn-primary-cta" style="background:#3AB5F7; color:#01030a;">Solicitar Propuesta</button>
+          <button id="back-to-room-btn" class="btn-secondary-cta">Volver al Salón 2.5D</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ ENGINE ════════════════════════════════ -->
+  <script src="js/main.js"></script>
+</body>
+</html>
