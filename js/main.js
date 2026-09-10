@@ -962,14 +962,51 @@ function renderAvatarBillboard(depthBuf) {
 
 
 // ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // §13 RENDER — HUD
 // ══════════════════════════════════════════════════════
+
+/**
+ * Detecta qué pantalla está en el centro de la mira,
+ * verificando si la Vaquita (avatar billboard) ocluye la visión.
+ */
+function getCenterAimScreen() {
+  const centerHit = castRay(player.dir);
+  if (!centerHit || !centerHit.screen) return null;
+
+  // Proyección de la Vaquita (ubicada en 0,0 del salón)
+  const toX  = -player.x;
+  const toY  = -player.y;
+  const cosD = Math.cos(player.dir);
+  const sinD = Math.sin(player.dir);
+  const camZ =  toX * cosD + toY * sinD;
+  const camX =  toY * cosD - toX * sinD;
+
+  // Si la Vaquita está en el campo visual frontal y más cerca que la pared
+  if (camZ > 40 && camZ < centerHit.perpDist) {
+    const projF   = (W / 2) / Math.tan(CFG.FOV / 2);
+    const screenX = (W / 2) + (camX / camZ) * projF;
+    const sprH    = (CFG.WALL_SCALE * H * CFG.ROOM_R * 0.90) / camZ;
+    const sprW    = sprH * 0.65;
+    const sprTop  = (H - sprH) / 2;
+    const sprBot  = sprTop + sprH;
+
+    const W2 = W / 2, H2 = H / 2;
+    // Si la mira central cae dentro de la silueta de la Vaquita o su pedestal
+    if (Math.abs(screenX - W2) <= sprW * 0.58 && H2 >= sprTop - 10 && H2 <= sprBot + sprH * 0.15) {
+      // La mira está sobre la Vaquita; la pared detrás queda ocluida
+      return null;
+    }
+  }
+
+  return centerHit.screen;
+}
+
 function renderHUD() {
   const W2 = W/2, H2 = H/2;
 
-  // Detectar pantalla al centro
-  const centerHit = castRay(player.dir);
-  hoveredScreen   = centerHit?.screen ?? null;
+  // Detectar pantalla al centro (respetando oclusión por la Vaquita)
+  hoveredScreen   = getCenterAimScreen();
   const onScreen  = !!hoveredScreen;
 
   // ── 1. Crosshair ─────────────────────────────────
@@ -981,32 +1018,34 @@ function renderHUD() {
   ctx.moveTo(W2, H2-cs); ctx.lineTo(W2, H2+cs);
   ctx.stroke();
 
-  // ── 2. Label de pantalla en hover (Tarjeta luminosa) ──
+  // ── 2. Label de pantalla en hover (Tarjeta anclada inferior, nunca tapa el centro) ──
   if (onScreen) {
     const scr = hoveredScreen;
     const [r, g, b] = scr.rgb;
     const isFlag = !!scr.flagship;
 
-    const lW  = clamp(Math.round(scr.label.length * 10 + 70), 300, Math.round(W * 0.56));
-    const lH  = isFlag ? 106 : (scr.primary ? 96 : 78);
-    const lX  = W2 - lW / 2, lY = H2 + 28;
+    const lW  = clamp(Math.round(scr.label.length * 9.5 + 70), 300, Math.min(540, Math.round(W * 0.88)));
+    const lH  = isFlag ? 92 : 76;
+    const lX  = W2 - lW / 2;
+    // Posicionamiento inferior limpio: no bloquea ni el centro ni la Vaquita
+    const lY  = isTouchDevice ? Math.max(H2 + 40, H - lH - 95) : (H - lH - 26);
 
     ctx.fillStyle = isFlag ? 'rgba(8, 12, 22, 0.96)' : 'rgba(255, 255, 255, 0.96)';
     roundRect(ctx, lX, lY, lW, lH, 10);
     ctx.fill();
 
     ctx.strokeStyle = isFlag ? '#3AB5F7' : `rgba(${r},${g},${b},0.85)`;
-    ctx.lineWidth   = isFlag ? 2.5 : 2;
+    ctx.lineWidth   = isFlag ? 2 : 1.5;
     ctx.stroke();
 
     // Barra superior
     ctx.fillStyle = isFlag ? '#F2C94C' : `rgb(${r},${g},${b})`;
-    ctx.fillRect(lX + 8, lY, lW - 16, 3);
+    ctx.fillRect(lX + 8, lY, lW - 16, 2.5);
 
-    let curY = lY + 20;
+    let curY = lY + 18;
     if (isFlag) {
       ctx.fillStyle    = '#F2C94C';
-      ctx.font         = `700 8.5px 'Poppins', sans-serif`;
+      ctx.font         = `700 8px 'Poppins', sans-serif`;
       ctx.textAlign    = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('★ PRODUCTO ESTRELLA · INFRAESTRUCTURA B2B', W2, curY);
@@ -1014,27 +1053,26 @@ function renderHUD() {
     }
 
     ctx.fillStyle    = isFlag ? '#FFFFFF' : '#2D2D2D';
-    ctx.font         = `800 13.5px 'Poppins', sans-serif`;
+    ctx.font         = `800 13px 'Poppins', sans-serif`;
     ctx.textAlign    = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(scr.label, W2, curY);
-    curY += 16;
+    curY += 15;
 
     ctx.fillStyle = isFlag ? '#94A3B8' : '#718096';
-    ctx.font      = `500 9.5px 'Poppins', sans-serif`;
+    ctx.font      = `500 9px 'Poppins', sans-serif`;
     ctx.fillText(scr.sub, W2, curY);
     curY += 16;
 
-    if (scr.tagline) {
-      ctx.fillStyle = isFlag ? '#38BDF8' : `rgb(${r},${g},${b})`;
-      ctx.font      = `600 9px 'Poppins', sans-serif`;
-      ctx.fillText(`"${scr.tagline}"`, W2, curY);
-      curY += 18;
+    if (isFlag) {
+      ctx.fillStyle = '#38BDF8';
+      ctx.font      = `800 9.5px 'Poppins', sans-serif`;
+      ctx.fillText('⚡ [ CLICK ]  DESPLEGAR INFRAESTRUCTURA MARKOS', W2, curY);
+    } else {
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      ctx.font      = `700 9.5px 'Poppins', sans-serif`;
+      ctx.fillText('[ CLICK ]  explorar este espacio', W2, curY);
     }
-
-    ctx.fillStyle = isFlag ? '#FA61A2' : `rgb(${r},${g},${b})`;
-    ctx.font      = `800 10px 'Poppins', sans-serif`;
-    ctx.fillText(isFlag ? '⚡ [ CLICK ]  DESPLEGAR INFRAESTRUCTURA' : '[ CLICK ]  explorar este espacio', W2, curY);
   }
 
   // ── 3. Horizonte luminoso ──────────────────────────
