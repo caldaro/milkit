@@ -112,7 +112,7 @@ window.cyclePalette = cyclePalette;
 //
 //     12 vértices equidistantes, 12 aristas.
 //     Cada arista puede ser: PARED, PANTALLA o BORDE.
-//     La pantalla principal de MarkOS ocupa la arista 0
+//     La pantalla principal de Soluciones Creativas ocupa la arista 0
 //     (directamente frente al jugador al iniciar).
 // ══════════════════════════════════════════════════════
 
@@ -164,42 +164,37 @@ function edgeCenterAngle(edge) {
 // ══════════════════════════════════════════════════════
 const SCREENS = [
   {
-    id:       'markos',
-    label:    'MarkOS · Growth OS',
-    sub:      'Omni-Channel · Search Dominance · CRM · Data Core',
-    rgb:      [58, 181, 247],   // --accent cyan
-    primary:  true,
-    flagship: true,
-    badge:    '★ PRODUCTO ESTRELLA',
-    tagline:  'No contrates una agencia. Instala una infraestructura.',
-    cta:      'Desplegar MarkOS',
+    id:      'milkit-creativas',
+    label:   'Milkit · Soluciones Creativas',
+    sub:     'Estrategia · Branding · Contenido · Campañas 360°',
+    rgb:     [58, 181, 247],   // --accent cyan
+    primary: true,
+    tagline: 'Tu marca no necesita más likes. Necesita resultados.',
+    cta:     'Ver Portafolio',
   },
   {
-    id:       'milkit-creativas',
-    label:    'Milkit · Creativas & Branding',
-    sub:      'Estrategia de Marca · Identidad Visual · Campañas 360°',
-    rgb:      [250, 97, 162],   // --hot rosa
-    primary:  false,
-    flagship: false,
-    badge:    'ESTUDIO CREATIVO',
+    id:      'milkit-seo',
+    label:   'SEO · Emailing · ADS',
+    sub:     'Google Ads · Meta · Email Flows · Embudos Directos',
+    rgb:     [250, 97, 162],   // --hot rosa
+    primary: false,
+    cta:     'Ver Estrategias',
   },
   {
-    id:       'milkit-seo',
-    label:    'SEO · Emailing · ADS',
-    sub:      'Google Ads · Meta · Email Flows · Embudos Directos',
-    rgb:      [144, 89, 200],   // --purple
-    primary:  false,
-    flagship: false,
-    badge:    'GROWTH & MEDIA',
+    id:      'milkit-multimedia',
+    label:   'Diseño Multimedia & Motion',
+    sub:     'Motion Graphics · Video Corporativo · Spots 3D',
+    rgb:     [144, 89, 200],   // --purple
+    primary: false,
+    cta:     'Explorar Producción',
   },
   {
-    id:       'milkit-multimedia',
-    label:    'Diseño & Motion Audiovisual',
-    sub:      '3D Motion · Animación · Video · Live Streaming',
-    rgb:      [242, 201, 76],   // --yellow
-    primary:  false,
-    flagship: false,
-    badge:    'PRODUCCIÓN & 3D',
+    id:      'milkit-digital',
+    label:   'Streaming · Apps · UX/UI',
+    sub:     'Front-End · React · Live Streaming · Experiencias Digitales',
+    rgb:     [242, 201, 76],   // --yellow
+    primary: false,
+    cta:     'Conocer Labs',
   },
 ];
 
@@ -457,96 +452,8 @@ function buildScreenTexture(scr) {
   c.fillStyle = bgGrad;
   c.fillRect(0, 0, TEX_W, TEX_H);
 
-  // ── Pantalla ESTRELLA: MarkOS (Monolito Obsidian) ────
-  if (scr.flagship) {
-    // Fondo de cristal obsidian de alta tecnología
-    c.fillStyle = '#080C16';
-    c.fillRect(0, 0, TEX_W, TEX_H);
-
-    // Glow de ciber-infraestructura (Cyan + Magenta)
-    const halo = c.createRadialGradient(TEX_W / 2, 45, 10, TEX_W / 2, 80, TEX_W * 0.75);
-    halo.addColorStop(0,   'rgba(58, 181, 247, 0.35)');
-    halo.addColorStop(0.5, 'rgba(250, 97, 162, 0.12)');
-    halo.addColorStop(1,   'transparent');
-    c.fillStyle = halo;
-    c.fillRect(0, 0, TEX_W, TEX_H);
-
-    // Badge Dorado / Cyan Superior
-    c.fillStyle = 'rgba(242, 201, 76, 0.18)';
-    roundRect(c, TEX_W / 2 - 62, 12, 124, 18, 9);
-    c.fill();
-    c.strokeStyle = '#F2C94C';
-    c.lineWidth   = 1;
-    roundRect(c, TEX_W / 2 - 62, 12, 124, 18, 9);
-    c.stroke();
-
-    c.fillStyle    = '#F2C94C';
-    c.textAlign    = 'center';
-    c.textBaseline = 'middle';
-    c.font         = `700 7.5px 'Poppins', sans-serif`;
-    c.fillText('★ PRODUCTO ESTRELLA', TEX_W / 2, 21);
-
-    // Título Central: MarkOS
-    c.fillStyle = '#FFFFFF';
-    c.font      = `900 21px 'Poppins', sans-serif`;
-    c.fillText('MarkOS', TEX_W / 2, 46);
-
-    // Subtítulo con acento Cyan
-    c.fillStyle = '#38BDF8';
-    c.font      = `700 8.5px 'Poppins', sans-serif`;
-    c.fillText('B2B GROWTH OS · INFRAESTRUCTURA', TEX_W / 2, 63);
-
-    // 4 Motores Core en micro-tarjetas oscuras
-    const engines = [
-      '⚙ Omni-Channel Content Engine',
-      '◉ Search Dominance & ADS',
-      '◎ CRM & Lead Orchestration',
-      '◈ Data & Telemetry Core'
-    ];
-    c.font = `600 7.5px 'Poppins', sans-serif`;
-    engines.forEach((eng, i) => {
-      const ey = 86 + i * 18;
-      c.fillStyle = 'rgba(255, 255, 255, 0.06)';
-      roundRect(c, 18, ey - 7, TEX_W - 36, 16, 8);
-      c.fill();
-      c.strokeStyle = 'rgba(58, 181, 247, 0.35)';
-      c.lineWidth   = 0.8;
-      roundRect(c, 18, ey - 7, TEX_W - 36, 16, 8);
-      c.stroke();
-
-      c.fillStyle = '#3AB5F7';
-      c.beginPath();
-      c.arc(28, ey + 1, 2, 0, Math.PI * 2);
-      c.fill();
-
-      c.fillStyle = '#E2E8F0';
-      c.textAlign = 'left';
-      c.fillText(eng, 36, ey + 1.5);
-    });
-
-    // Botón CTA de Alto Impacto (Degradé Cyan → Magenta)
-    c.textAlign = 'center';
-    const btnGrad = c.createLinearGradient(28, 168, TEX_W - 28, 168);
-    btnGrad.addColorStop(0, '#3AB5F7');
-    btnGrad.addColorStop(1, '#FA61A2');
-    c.fillStyle = btnGrad;
-    roundRect(c, 26, 168, TEX_W - 52, 26, 13);
-    c.fill();
-
-    c.fillStyle = '#FFFFFF';
-    c.font      = `800 9px 'Poppins', sans-serif`;
-    c.fillText('⚡ DESPLEGAR MARKOS →', TEX_W / 2, 181);
-
-    // Telemetría inferior
-    c.fillStyle = '#94A3B8';
-    c.font      = `600 7px 'Poppins', sans-serif`;
-    c.fillText('PIPELINES: 14 ▲ · CAC: -42% ▼ · UPTIME: 99.9%', TEX_W / 2, 210);
-
-    c.fillStyle = '#38BDF8';
-    c.font      = `700 7.5px 'Poppins', sans-serif`;
-    c.fillText('● INFRAESTRUCTURA B2B EN VIVO', TEX_W / 2, 224);
-
-  } else if (scr.primary && scr.tagline) {
+  // ── Pantalla principal: Milkit Creativas especial ────
+  if (scr.primary && scr.tagline) {
     // Pill badge superior
     c.fillStyle = colA(0.14);
     roundRect(c, TEX_W / 2 - 54, 15, 108, 20, 10);
@@ -870,21 +777,12 @@ function renderWalls() {
           ctx.fillRect(col, wallTop, 1, wallH);
         }
 
-        // Halo de iluminación de la pantalla (MarkOS tiene aura eléctrica reactiva)
-        if (hit.screen.flagship) {
-          const pulse = 0.7 + 0.3 * Math.sin(performance.now() * 0.005);
-          const edgeF = 1 - clamp(Math.min(hit.u, 1 - hit.u) / 0.12, 0, 1);
-          if (edgeF > 0.01) {
-            ctx.fillStyle = `rgba(58, 181, 247, ${edgeF * 0.75 * pulse * bright})`;
-            ctx.fillRect(col, wallTop, 1, wallH);
-          }
-        } else {
-          const edgeF = 1 - clamp(Math.min(hit.u, 1 - hit.u) / 0.07, 0, 1);
-          if (edgeF > 0.01) {
-            const [r, g, b] = hit.screen.rgb;
-            ctx.fillStyle = `rgba(${r},${g},${b},${edgeF * 0.35 * bright})`;
-            ctx.fillRect(col, wallTop, 1, wallH);
-          }
+        // Halo de iluminación de la pantalla
+        const edgeF = 1 - clamp(Math.min(hit.u, 1 - hit.u) / 0.08, 0, 1);
+        if (edgeF > 0.01) {
+          const [r, g, b] = hit.screen.rgb;
+          ctx.fillStyle = `rgba(${r},${g},${b},${edgeF * 0.40 * bright})`;
+          ctx.fillRect(col, wallTop, 1, wallH);
         }
       }
 
@@ -1129,56 +1027,41 @@ function renderHUD() {
   if (onScreen && !CFG.USE_CSS3D_SCREENS) {
     const scr = hoveredScreen;
     const [r, g, b] = scr.rgb;
-    const isFlag = !!scr.flagship;
 
     const lW  = clamp(Math.round(scr.label.length * 9.5 + 70), 300, Math.min(540, Math.round(W * 0.88)));
-    const lH  = isFlag ? 92 : 76;
+    const lH  = 78;
     const lX  = W2 - lW / 2;
     const lY  = isTouchDevice ? Math.max(H2 + 40, H - lH - 95) : (H - lH - 26);
 
-    ctx.fillStyle = isFlag ? 'rgba(8, 12, 22, 0.96)' : 'rgba(255, 255, 255, 0.96)';
+    ctx.fillStyle = 'rgba(8, 14, 28, 0.95)';
     roundRect(ctx, lX, lY, lW, lH, 10);
     ctx.fill();
 
-    ctx.strokeStyle = isFlag ? '#3AB5F7' : `rgba(${r},${g},${b},0.85)`;
-    ctx.lineWidth   = isFlag ? 2 : 1.5;
+    ctx.strokeStyle = `rgba(${r},${g},${b},0.85)`;
+    ctx.lineWidth   = 1.5;
     ctx.stroke();
 
     // Barra superior
-    ctx.fillStyle = isFlag ? '#F2C94C' : `rgb(${r},${g},${b})`;
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
     ctx.fillRect(lX + 8, lY, lW - 16, 2.5);
 
-    let curY = lY + 18;
-    if (isFlag) {
-      ctx.fillStyle    = '#F2C94C';
-      ctx.font         = `700 8px 'Poppins', sans-serif`;
-      ctx.textAlign    = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('★ PRODUCTO ESTRELLA · INFRAESTRUCTURA B2B', W2, curY);
-      curY += 16;
-    }
+    let curY = lY + 20;
 
-    ctx.fillStyle    = isFlag ? '#FFFFFF' : '#2D2D2D';
-    ctx.font         = `800 13px 'Poppins', sans-serif`;
+    ctx.fillStyle    = '#FFFFFF';
+    ctx.font         = `800 13.5px 'Poppins', sans-serif`;
     ctx.textAlign    = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(scr.label, W2, curY);
-    curY += 15;
+    curY += 17;
 
-    ctx.fillStyle = isFlag ? '#94A3B8' : '#718096';
+    ctx.fillStyle = '#94A3B8';
     ctx.font      = `500 9px 'Poppins', sans-serif`;
     ctx.fillText(scr.sub, W2, curY);
-    curY += 16;
+    curY += 17;
 
-    if (isFlag) {
-      ctx.fillStyle = '#38BDF8';
-      ctx.font      = `800 9.5px 'Poppins', sans-serif`;
-      ctx.fillText('⚡ [ CLICK ]  DESPLEGAR INFRAESTRUCTURA MARKOS', W2, curY);
-    } else {
-      ctx.fillStyle = `rgb(${r},${g},${b})`;
-      ctx.font      = `700 9.5px 'Poppins', sans-serif`;
-      ctx.fillText('[ CLICK ]  explorar este espacio', W2, curY);
-    }
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.font      = `700 9.5px 'Poppins', sans-serif`;
+    ctx.fillText(`[ CLICK ]  ${scr.cta || 'explorar este espacio'}`, W2, curY);
   }
 
   // ── 3. Horizonte luminoso ──────────────────────────
@@ -1240,24 +1123,17 @@ function renderCompass() {
     const diffA = Math.abs(normalizeAngle(player.dir - angle));
     const inFov = diffA < CFG.FOV/2;
 
-    if (scr.flagship) {
-      // Beacon especial para MarkOS (Producto Estrella)
-      const pulse = 3 + 2 * Math.sin(performance.now() * 0.006);
-      ctx.fillStyle = 'rgba(58, 181, 247, 0.45)';
+    if (inFov) {
+      const pulse = 3 + 1.5 * Math.sin(performance.now() * 0.006);
+      ctx.fillStyle = `rgba(${sr},${sg},${sb},0.45)`;
       ctx.beginPath();
       ctx.arc(dx, dy, pulse + 3, 0, Math.PI * 2);
       ctx.fill();
-
-      ctx.fillStyle = inFov ? '#F2C94C' : 'rgba(242, 201, 76, 0.85)';
-      ctx.beginPath();
-      ctx.arc(dx, dy, inFov ? 5.5 : 4, 0, Math.PI * 2);
-      ctx.fill();
-    } else {
-      ctx.fillStyle = inFov ? `rgb(${sr},${sg},${sb})` : `rgba(${sr},${sg},${sb},0.45)`;
-      ctx.beginPath();
-      ctx.arc(dx, dy, inFov ? 4 : 2.5, 0, Math.PI*2);
-      ctx.fill();
     }
+    ctx.fillStyle = inFov ? `rgb(${sr},${sg},${sb})` : `rgba(${sr},${sg},${sb},0.60)`;
+    ctx.beginPath();
+    ctx.arc(dx, dy, inFov ? 4.5 : 3, 0, Math.PI*2);
+    ctx.fill();
   });
 
   ctx.restore();
@@ -1324,10 +1200,10 @@ function update(dt) {
 // ══════════════════════════════════════════════════════
 
 const CSS3D_SCREENS = [
-  { edgeIdx: 0, domId: 'css3d-screen-markos',     screenId: 'markos' },
-  { edgeIdx: 3, domId: 'css3d-screen-creativas',  screenId: 'milkit-creativas' },
-  { edgeIdx: 5, domId: 'css3d-screen-seo',        screenId: 'milkit-seo' },
-  { edgeIdx: 8, domId: 'css3d-screen-multimedia', screenId: 'milkit-multimedia' },
+  { edgeIdx: 0, domId: 'css3d-screen-creativas',  screenId: 'milkit-creativas' },
+  { edgeIdx: 3, domId: 'css3d-screen-seo',        screenId: 'milkit-seo' },
+  { edgeIdx: 5, domId: 'css3d-screen-multimedia', screenId: 'milkit-multimedia' },
+  { edgeIdx: 8, domId: 'css3d-screen-digital',    screenId: 'milkit-digital' },
 ];
 
 let css3dViewportEl = null;
@@ -1481,7 +1357,7 @@ function onScreenSelect(screen) {
   const overlay   = document.getElementById('transition-overlay');
   const [r, g, b] = screen.rgb;
 
-  console.log(`[Mikit] Navigate → ${screen.id}`);
+  console.log(`[Milkit] Navegar → ${screen.id}`);
 
   overlay.style.background = `radial-gradient(ellipse at center, rgba(${r},${g},${b},0.45) 0%, rgba(1,4,12,0.95) 75%)`;
   overlay.style.transition = 'opacity 0.38s ease';
@@ -1489,24 +1365,39 @@ function onScreenSelect(screen) {
 
   setTimeout(() => {
     overlay.style.opacity = '0';
-    if (screen.id === 'markos' || screen.id === 'milkit-creativas') {
-      openProductEnvironment(screen.id);
-    } else {
-      showToast(`Próximamente · ${screen.label}`);
-    }
+    openProductEnvironment(screen.id);
   }, 400);
 }
 
 function openProductEnvironment(productId) {
-  if (productId === 'markos' || productId === 'milkit-creativas') {
-    isProductViewOpen = true;
-    if (document.pointerLockElement) document.exitPointerLock();
-    
-    const modal = document.getElementById('markos-modal');
-    if (modal) {
-      modal.classList.add('active');
-      modal.scrollTop = 0;
-      animateTelemetry();
+  isProductViewOpen = true;
+  if (document.pointerLockElement) document.exitPointerLock();
+  
+  const modal = document.getElementById('markos-modal');
+  if (modal) {
+    modal.classList.add('active');
+    modal.scrollTop = 0;
+    animateTelemetry();
+
+    // Enfocar suavemente la tarjeta del servicio seleccionado si corresponde
+    if (productId) {
+      const cardMap = {
+        'milkit-creativas':  'service-card-creativas',
+        'milkit-seo':        'service-card-seo',
+        'milkit-multimedia': 'service-card-multimedia',
+        'milkit-digital':    'service-card-digital',
+      };
+      const targetId = cardMap[productId];
+      if (targetId) {
+        setTimeout(() => {
+          const el = document.getElementById(targetId);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.style.transform = 'scale(1.02)';
+            setTimeout(() => { el.style.transform = ''; }, 700);
+          }
+        }, 220);
+      }
     }
   }
 }
@@ -1561,7 +1452,7 @@ function init() {
   document.getElementById('close-modal-btn')?.addEventListener('click', closeProductEnvironment);
   document.getElementById('back-to-room-btn')?.addEventListener('click', closeProductEnvironment);
   document.getElementById('cta-demo-btn')?.addEventListener('click', () => {
-    showToast('✓ Solicitud de Auditoría registrada. Abriendo canal con Adam...');
+    showToast('✓ Solicitud de Propuesta registrada. Abriendo canal con Milkit...');
   });
 
   // Hook virtual D-Pad buttons for mobile
@@ -1587,7 +1478,7 @@ function init() {
     if (hoveredScreen) {
       onScreenSelect(hoveredScreen);
     } else {
-      openProductEnvironment('markos');
+      openProductEnvironment('milkit-creativas');
     }
   });
 }
