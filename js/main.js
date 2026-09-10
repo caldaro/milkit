@@ -367,104 +367,149 @@ function buildScreenTexture(scr) {
   const col  = `rgb(${r},${g},${b})`;
   const colA = (a) => `rgba(${r},${g},${b},${a})`;
 
-  // Fondo blanco con tarjeta luminosa
-  c.fillStyle = '#ffffff';
+  // Fondo blanco minimalista
+  c.fillStyle = '#FFFFFF';
   c.fillRect(0, 0, TEX_W, TEX_H);
 
-  // Gradiente radial sutil de acento de marca
-  const gw = c.createRadialGradient(TEX_W/2, TEX_H*0.44, 0, TEX_W/2, TEX_H*0.44, TEX_W*0.6);
-  gw.addColorStop(0,   colA(scr.primary ? 0.14 : 0.08));
-  gw.addColorStop(0.7, colA(0.02));
-  gw.addColorStop(1,   'transparent');
-  c.fillStyle = gw;
+  // Tarjeta contenedora con esquinas redondeadas
+  c.save();
+  roundRect(c, 8, 8, TEX_W - 16, TEX_H - 16, 12);
+  c.clip();
+
+  // Fondo de la tarjeta con sutil resplandor de marca
+  const bgGrad = c.createRadialGradient(TEX_W / 2, TEX_H * 0.35, 10, TEX_W / 2, TEX_H * 0.35, TEX_W * 0.7);
+  bgGrad.addColorStop(0,   colA(scr.primary ? 0.14 : 0.08));
+  bgGrad.addColorStop(0.7, colA(0.02));
+  bgGrad.addColorStop(1,   '#FFFFFF');
+  c.fillStyle = bgGrad;
   c.fillRect(0, 0, TEX_W, TEX_H);
 
   // ── Pantalla principal: Milkit Creativas especial ────
   if (scr.primary && scr.tagline) {
-    // Header
-    c.fillStyle = colA(0.12);
-    c.fillRect(0, 0, TEX_W, 54);
-
+    // Pill badge superior
+    c.fillStyle = colA(0.14);
+    roundRect(c, TEX_W / 2 - 54, 15, 108, 20, 10);
+    c.fill();
     c.fillStyle = col;
     c.textAlign = 'center';
-    c.font      = `800 15px 'Poppins', sans-serif`;
-    c.fillText('Milkit', TEX_W/2, 24);
+    c.textBaseline = 'middle';
+    c.font = `700 8.5px 'Poppins', sans-serif`;
+    c.fillText('MILKIT · SHOWROOM', TEX_W / 2, 25);
 
-    c.fillStyle = '#718096';
-    c.font      = `600 9px 'Poppins', sans-serif`;
-    c.fillText('Soluciones Creativas', TEX_W/2, 40);
+    // Título Principal
+    c.fillStyle = '#0F172A';
+    c.font      = `800 16px 'Poppins', sans-serif`;
+    c.fillText('Soluciones', TEX_W / 2, 50);
+    c.fillStyle = col;
+    c.font      = `800 16px 'Poppins', sans-serif`;
+    c.fillText('Creativas', TEX_W / 2, 69);
 
-    // Separador
-    c.fillStyle = colA(0.3);
-    c.fillRect(18, 52, TEX_W-36, 1.5);
+    // Servicios en cápsulas / chips modernos
+    const services = [
+      'Estrategia & Branding 360°',
+      'SEO · Emailing · Google ADS',
+      'Diseño & Animación Motion',
+      'Streaming · Apps · UX/UI'
+    ];
+    c.font = `600 8px 'Poppins', sans-serif`;
+    services.forEach((s, i) => {
+      const sy = 94 + i * 17;
+      c.fillStyle = 'rgba(241, 245, 249, 0.95)';
+      roundRect(c, 22, sy - 7, TEX_W - 44, 15, 7.5);
+      c.fill();
 
-    // Servicios
-    const engines = ['⚙ Branding & Estrategia', '◉ SEO · Emailing · ADS', '◎ Diseño & Motion', '◈ Streaming · Apps · UX'];
-    c.font = `600 9px 'Poppins', sans-serif`;
-    engines.forEach((e, i) => {
-      c.fillStyle = i === 0 ? col : '#4a5568';
-      c.fillText(e, TEX_W/2, 74 + i * 18);
+      // Dot indicador
+      c.fillStyle = col;
+      c.beginPath();
+      c.arc(32, sy, 2.5, 0, Math.PI * 2);
+      c.fill();
+
+      c.fillStyle = '#334155';
+      c.textAlign = 'left';
+      c.fillText(s, 42, sy + 0.5);
     });
 
-    // Tagline
-    c.fillStyle = '#2D2D2D';
-    c.font      = `600 9.5px 'Poppins', sans-serif`;
-    c.fillText(scr.tagline, TEX_W/2, 156);
-
-    // CTA badge
+    // Botón CTA moderno tipo píldora
+    c.textAlign = 'center';
     c.fillStyle = col;
-    roundRect(c, 40, 168, TEX_W-80, 24, 6);
+    roundRect(c, 34, 172, TEX_W - 68, 26, 13);
     c.fill();
-    c.fillStyle = '#ffffff';
-    c.font      = `700 9px 'Poppins', sans-serif`;
-    c.fillText(scr.cta, TEX_W/2, 184);
+    c.fillStyle = '#FFFFFF';
+    c.font      = `700 9.5px 'Poppins', sans-serif`;
+    c.fillText('EXPLORAR ESTUDIO →', TEX_W / 2, 185);
 
-    // Métricas simuladas
-    c.fillStyle = '#718096';
-    c.font      = `600 8px 'Poppins', sans-serif`;
-    c.fillText('PROYECTOS ACTIVOS: 14 ▲', TEX_W/2, 212);
-    c.fillText('ENTREGA EXPRESS: 48H ●', TEX_W/2, 224);
+    // Tagline inferior
+    c.fillStyle = '#64748B';
+    c.font      = `500 8px 'Poppins', sans-serif`;
+    c.fillText('Soluciones Digitales de Alto Rendimiento', TEX_W / 2, 214);
+    c.fillStyle = colA(0.85);
+    c.font      = `700 7.5px 'Poppins', sans-serif`;
+    c.fillText('● DISPONIBILIDAD INMEDIATA', TEX_W / 2, 228);
 
   } else {
-    // ── Pantallas secundarias: layout estándar ────────
-    c.strokeStyle = colA(0.9);
-    c.lineWidth   = 2.5;
-    c.strokeRect(6, 6, TEX_W-12, TEX_H-12);
-
-    c.fillStyle = colA(0.2);
-    c.fillRect(20, 36, TEX_W-40, 1.5);
-
-    // Label
-    c.fillStyle    = '#2D2D2D';
-    c.textAlign    = 'center';
+    // ── Pantallas secundarias ─────────────────────────
+    // Pill tag de categoría
+    c.fillStyle = colA(0.14);
+    roundRect(c, TEX_W / 2 - 46, 20, 92, 20, 10);
+    c.fill();
+    c.fillStyle = col;
+    c.textAlign = 'center';
     c.textBaseline = 'middle';
-    c.font         = `700 13px 'Poppins', sans-serif`;
-    const words    = scr.label.split(' ');
-    const lines    = [];
-    let line       = '';
+    c.font = `700 8.5px 'Poppins', sans-serif`;
+    c.fillText('CAPACIDADES', TEX_W / 2, 30);
+
+    // Label / Título
+    c.fillStyle = '#0F172A';
+    c.font      = `800 13.5px 'Poppins', sans-serif`;
+    const words = scr.label.split(' ');
+    const lines = [];
+    let line    = '';
     for (const w of words) {
-      const test = line ? line+' '+w : w;
-      if (c.measureText(test).width > TEX_W-44) { lines.push(line); line = w; }
+      const test = line ? line + ' ' + w : w;
+      if (c.measureText(test).width > TEX_W - 44) { lines.push(line); line = w; }
       else line = test;
     }
     lines.push(line);
-    const lh  = 18;
-    const sy0 = TEX_H*0.44 - ((lines.length-1)*lh)/2;
-    lines.forEach((l, i) => c.fillText(l, TEX_W/2, sy0+i*lh));
+    const lh  = 17;
+    const sy0 = 66 - ((lines.length - 1) * lh) / 2;
+    lines.forEach((l, i) => c.fillText(l, TEX_W / 2, sy0 + i * lh));
 
-    c.fillStyle = '#718096';
-    c.font      = `500 9.5px 'Poppins', sans-serif`;
-    scr.sub.split(' · ').slice(0, 3).forEach((s, i) => c.fillText(s, TEX_W/2, TEX_H*0.62+i*16));
+    // Puntos clave de servicio
+    const subs = scr.sub.split(' · ');
+    subs.slice(0, 4).forEach((s, i) => {
+      const sy = 108 + i * 20;
+      c.fillStyle = 'rgba(241, 245, 249, 0.9)';
+      roundRect(c, 22, sy - 8, TEX_W - 44, 16, 8);
+      c.fill();
 
+      c.fillStyle = col;
+      c.beginPath();
+      c.arc(33, sy, 2.5, 0, Math.PI * 2);
+      c.fill();
+
+      c.fillStyle = '#475569';
+      c.textAlign = 'left';
+      c.font = `600 8.5px 'Poppins', sans-serif`;
+      c.fillText(s, 42, sy + 0.5);
+    });
+
+    // Botón CTA inferior
+    c.textAlign = 'center';
     c.fillStyle = col;
+    roundRect(c, 38, TEX_H - 44, TEX_W - 76, 24, 12);
+    c.fill();
+    c.fillStyle = '#FFFFFF';
     c.font      = `700 9px 'Poppins', sans-serif`;
-    c.fillText('○ EXPLORAR →', TEX_W/2, TEX_H*0.86);
+    c.fillText('DESCUBRIR MÁS →', TEX_W / 2, TEX_H - 32);
   }
 
-  // Marco borde
-  c.strokeStyle = colA(0.85);
-  c.lineWidth   = 2;
-  c.strokeRect(6, 6, TEX_W-12, TEX_H-12);
+  c.restore();
+
+  // Borde exterior sutil de la tarjeta
+  c.strokeStyle = colA(0.4);
+  c.lineWidth   = 1.5;
+  roundRect(c, 8, 8, TEX_W - 16, TEX_H - 16, 12);
+  c.stroke();
 
   screenTexCache.set(scr.id, oc);
   return oc;
@@ -476,40 +521,81 @@ function initTextures() {
 
 
 // ══════════════════════════════════════════════════════
-// §10 RENDER — TECHO Y SUELO
+// §10 RENDER — TECHO Y SUELO (Galería Arquitectónica)
 // ══════════════════════════════════════════════════════
 function renderCeilingFloor() {
   const W2 = W / 2, H2 = H / 2;
   
-  // Techo gris muy sutil
-  ctx.fillStyle = '#FAFAFA';
+  // ── 1. Techo Galería: Iluminación Cenital (Skylight / Óculo) ──
+  const ceilGrad = ctx.createRadialGradient(W2, H2 * 0.35, 10, W2, H2 * 0.35, Math.max(W2, H2 * 1.3));
+  ceilGrad.addColorStop(0,    '#ffffff');
+  ceilGrad.addColorStop(0.25, '#f8fafc');
+  ceilGrad.addColorStop(0.65, '#e8edf3');
+  ceilGrad.addColorStop(1,    '#d8e0e9');
+  ctx.fillStyle = ceilGrad;
   ctx.fillRect(0, 0, W, H2);
-  
-  // Piso con gradiente hacia el horizonte
+
+  // Anillo arquitectónico empotrado del óculo en el techo
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(W2, H2 * 0.42, W * 0.42, H2 * 0.26, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+  ctx.lineWidth   = 3;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(W2, H2 * 0.42, W * 0.42, H2 * 0.26, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(148, 163, 184, 0.32)';
+  ctx.lineWidth   = 1;
+  ctx.stroke();
+  ctx.restore();
+
+  // ── 2. Piso: Microcemento Satinado Arquitectónico ────────────
   const floorGrad = ctx.createLinearGradient(0, H2, 0, H);
-  floorGrad.addColorStop(0, '#E0E5EC'); // Horizonte más oscuro
-  floorGrad.addColorStop(1, '#F4F6F8'); // Base clara
+  floorGrad.addColorStop(0,    '#cbd5e1'); // Sombra ambiental de horizonte
+  floorGrad.addColorStop(0.08, '#dfe5ec');
+  floorGrad.addColorStop(0.45, '#ecf1f6');
+  floorGrad.addColorStop(1,    '#f8fafc'); // Primer plano nítido y luminoso
   ctx.fillStyle = floorGrad;
   ctx.fillRect(0, H2, W, H2);
 
-  // Líneas de perspectiva en el piso (Cyan Milkit muy sutil)
+  // Reflejo difuso especular del óculo sobre el suelo pulido
+  const floorSpec = ctx.createRadialGradient(W2, H2 + (H - H2) * 0.55, 15, W2, H2 + (H - H2) * 0.55, W * 0.65);
+  floorSpec.addColorStop(0,    'rgba(255, 255, 255, 0.55)');
+  floorSpec.addColorStop(0.35, 'rgba(58, 181, 247, 0.06)'); // Brillo etéreo Milkit Cyan
+  floorSpec.addColorStop(1,    'transparent');
+  ctx.fillStyle = floorSpec;
+  ctx.fillRect(0, H2, W, H2);
+
+  // Juntas de dilatación sutiles de la losa de microcemento (arquitectura sobria)
   ctx.save();
-  ctx.strokeStyle = 'rgba(58, 181, 247, 0.15)';
-  ctx.lineWidth = 1;
-  for (let i = 0; i <= 24; i++) {
+  const slabLevels = [0.25, 0.48, 0.72, 0.94];
+  slabLevels.forEach(p => {
+    const y = H2 + (p ** 2.1) * H2;
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+    ctx.lineWidth   = 1;
     ctx.beginPath();
-    ctx.moveTo(W2, H2);
-    ctx.lineTo((i / 24) * W, H);
+    ctx.moveTo(0, y);
+    ctx.lineTo(W, y);
     ctx.stroke();
-  }
-  for (let d = 1; d <= 8; d++) {
-    const t = (d / 8) ** 2;
-    const y = H2 + t * H2;
-    ctx.beginPath(); 
-    ctx.moveTo(0, y); 
-    ctx.lineTo(W, y); 
+  });
+
+  // 4 juntas longitudinales mínimas de perspectiva arquitectónica
+  const colOffsets = [-0.62, -0.22, 0.22, 0.62];
+  colOffsets.forEach(off => {
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+    ctx.lineWidth   = 1;
+    ctx.beginPath();
+    ctx.moveTo(W2 + off * W * 0.15, H2);
+    ctx.lineTo(W2 + off * W * 0.85, H);
     ctx.stroke();
-  }
+  });
+
+  // Oclusión ambiental horizontal en el zócalo de fondo
+  const aoGrad = ctx.createLinearGradient(0, H2, 0, H2 + 24);
+  aoGrad.addColorStop(0, 'rgba(30, 41, 59, 0.14)');
+  aoGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = aoGrad;
+  ctx.fillRect(0, H2, W, 24);
   ctx.restore();
 }
 
@@ -549,49 +635,85 @@ function renderWalls() {
 
     // ── Iluminación direccional por normal de arista ──
     const norm    = EDGE_NORMALS[hit.edge.idx];
-    // dot(normal_inward, -light_dir) para determinar cuánta luz recibe la cara
-    const diffuse = clamp(-(norm.nx * LIGHT.x + norm.ny * LIGHT.y), 0.35, 1.0);
+    const diffuse = clamp(-(norm.nx * LIGHT.x + norm.ny * LIGHT.y), 0.40, 1.0);
 
     if (hit.screen) {
-      // ══════════════════════
-      // PANTALLA DIGITAL
-      // ══════════════════════
-      const tex  = screenTexCache.get(hit.screen.id);
-      const texX = (hit.u * TEX_W) | 0;
+      // ══════════════════════════════════════════════
+      // PANTALLA DIGITAL (Showroom Kiosk Ultra-Slim)
+      // ══════════════════════════════════════════════
+      const isBezel = (hit.u < 0.025 || hit.u > 0.975);
+      
+      if (isBezel) {
+        // Marco de titanio oscuro / bisel OLED
+        ctx.fillStyle = '#0F172A';
+        ctx.fillRect(col, wallTop, 1, wallH);
+      } else {
+        // Pantalla OLED interior con mapeo u
+        const innerU = (hit.u - 0.025) / (0.975 - 0.025);
+        const tex    = screenTexCache.get(hit.screen.id);
+        const texX   = clamp((innerU * TEX_W) | 0, 0, TEX_W - 1);
 
-      ctx.drawImage(tex, texX, 0, 1, TEX_H, col, wallTop, 1, wallH);
+        ctx.drawImage(tex, texX, 0, 1, TEX_H, col, wallTop, 1, wallH);
 
+        // Brillo satinado de cristal museo antirreflejo
+        const glassShine = Math.sin(innerU * Math.PI) * 0.06;
+        if (glassShine > 0.01) {
+          ctx.fillStyle = `rgba(255, 255, 255, ${glassShine})`;
+          ctx.fillRect(col, wallTop, 1, wallH);
+        }
+      }
+
+      // Niebla de profundidad
       if (fog > 0.04) {
-        ctx.fillStyle = `rgba(244,246,248,${fog * 0.5})`;
+        ctx.fillStyle = `rgba(203, 213, 225, ${fog * 0.55})`;
         ctx.fillRect(col, wallTop, 1, wallH);
       }
 
-      // Edge glow
-      const edgeF = 1 - clamp(Math.min(hit.u, 1-hit.u) / 0.068, 0, 1);
+      // Halo sutil de iluminación de la pantalla sobre el marco
+      const edgeF = 1 - clamp(Math.min(hit.u, 1 - hit.u) / 0.07, 0, 1);
       if (edgeF > 0.01) {
-        const [r,g,b] = hit.screen.rgb;
-        ctx.fillStyle = `rgba(${r},${g},${b},${edgeF * 0.45 * bright})`;
+        const [r, g, b] = hit.screen.rgb;
+        ctx.fillStyle = `rgba(${r},${g},${b},${edgeF * 0.35 * bright})`;
         ctx.fillRect(col, wallTop, 1, wallH);
       }
 
     } else {
-      // ══════════════════════
-      // PARED DODECAGONAL (Contraste dinámico + Zócalos)
-      // ══════════════════════
-      const edgeTone = (hit.edge.idx % 2 === 0) ? 1.0 : 0.85; // Mayor contraste
-      const lf = diffuse * edgeTone;
-      const base = Math.round(240 * lf); // Tono gris claro dinámico
+      // ══════════════════════════════════════════════
+      // PARED ARQUITECTÓNICA (Panel modular blanco museo)
+      // ══════════════════════════════════════════════
+      const edgeTone = (hit.edge.idx % 2 === 0) ? 1.0 : 0.93;
+      const lf       = diffuse * edgeTone;
+      const rVal     = Math.round(246 * lf);
+      const gVal     = Math.round(248 * lf);
+      const bVal     = Math.round(250 * lf);
 
-      ctx.fillStyle = `rgb(${base},${base},${base})`;
-      ctx.fillRect(col, wallTop, 1, wallH);
+      // Junta de dilatación vertical (Shadow Gap entre paneles de 12 lados)
+      const isJoint = (hit.u < 0.016 || hit.u > 0.984);
+      if (isJoint) {
+        ctx.fillStyle = 'rgba(30, 41, 59, 0.45)'; // Hendidura técnica arquitectónica
+        ctx.fillRect(col, wallTop, 1, wallH);
+      } else {
+        ctx.fillStyle = `rgb(${rVal},${gVal},${bVal})`;
+        ctx.fillRect(col, wallTop, 1, wallH);
+      }
 
-      // Cornisa (arriba) y Zócalo (abajo) para marcar el quiebre de geometría
-      ctx.fillStyle = 'rgba(45, 45, 45, 0.4)'; // Gris oscuro de la marca
-      ctx.fillRect(col, wallTop, 1, 3);
-      ctx.fillRect(col, wallTop + wallH - 3, 1, 3);
+      // Cornisa superior (remate minimalista con sombra)
+      const cHeight = Math.max(2, Math.round(wallH * 0.022));
+      ctx.fillStyle = 'rgba(30, 41, 59, 0.35)';
+      ctx.fillRect(col, wallTop, 1, cHeight);
 
+      // Zócalo empotrado moderno con luz indirecta LED
+      const bHeight = Math.max(3, Math.round(wallH * 0.045));
+      // Baseboard oscuro
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.65)';
+      ctx.fillRect(col, wallTop + wallH - bHeight, 1, bHeight);
+      // Fila de LED rehundido (indirect wash light)
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.fillRect(col, wallTop + wallH - bHeight, 1, 1.5);
+
+      // Niebla hacia el fondo
       if (fog > 0.01) {
-        ctx.fillStyle = `rgba(244,246,248,${fog})`; // Niebla gris muy claro, no blanco puro
+        ctx.fillStyle = `rgba(203, 213, 225, ${fog})`;
         ctx.fillRect(col, wallTop, 1, wallH);
       }
     }
@@ -602,7 +724,7 @@ function renderWalls() {
 
 
 // ══════════════════════════════════════════════════════
-// §12 RENDER — AVATAR BILLBOARD (Vaquita Milkit)
+// §12 RENDER — AVATAR BILLBOARD (Vaquita Milkit + Peana Escultórica)
 // ══════════════════════════════════════════════════════
 const avatarSprite = new Image();
 avatarSprite.src   = 'vaquita.png';
@@ -622,9 +744,10 @@ function renderAvatarBillboard(depthBuf) {
   const sprH    = (CFG.WALL_SCALE * H * CFG.ROOM_R * 0.90) / camZ;
   const sprW    = sprH * 0.65;
   const sprTop  = (H - sprH) / 2;
+  const baseY   = sprTop + sprH;
 
-  const col0 = Math.max(0,     Math.round(screenX - sprW/2));
-  const col1 = Math.min(W - 1, Math.round(screenX + sprW/2));
+  const col0 = Math.max(0,     Math.round(screenX - sprW));
+  const col1 = Math.min(W - 1, Math.round(screenX + sprW));
   if (col1 < col0 || sprH < 20) return;
 
   let visible = false;
@@ -634,36 +757,95 @@ function renderAvatarBillboard(depthBuf) {
   if (!visible) return;
 
   const fog   = fogFactor(camZ);
-  const alpha = (1 - fog * 0.6) * 0.92;
+  const alpha = (1 - fog * 0.6) * 0.96;
 
   ctx.save();
   ctx.globalAlpha = alpha;
 
-  // Aura Milkit: rosa → cyan
-  const aura = ctx.createRadialGradient(screenX, H/2, 0, screenX, H/2, sprH * 0.58);
-  aura.addColorStop(0,   'rgba(250,97,162,0.22)');   // --hot rosa
-  aura.addColorStop(0.5, 'rgba(58,181,247,0.12)');   // --accent cyan
+  // ── 1. Sombra de contacto en el suelo (Ambient Occlusion) ──
+  const pedW     = sprW * 0.95;
+  const pedRy    = pedW * 0.28;
+  const pedStepH = Math.max(6, sprH * 0.08);
+
+  const floorAo = ctx.createRadialGradient(screenX, baseY + pedStepH * 0.5, 5, screenX, baseY + pedStepH * 0.5, pedW * 1.45);
+  floorAo.addColorStop(0,   'rgba(15, 23, 42, 0.40)');
+  floorAo.addColorStop(0.5, 'rgba(15, 23, 42, 0.15)');
+  floorAo.addColorStop(1,   'transparent');
+  ctx.fillStyle = floorAo;
+  ctx.beginPath();
+  ctx.ellipse(screenX, baseY + pedStepH * 0.6, pedW * 1.4, pedRy * 1.5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── 2. Peana Escultórica Cilíndrica (Plinth contemporáneo) ──
+  // Lateral cilíndrico del pedestal
+  const pedSideGrad = ctx.createLinearGradient(screenX - pedW, baseY, screenX + pedW, baseY);
+  pedSideGrad.addColorStop(0,   '#cbd5e1');
+  pedSideGrad.addColorStop(0.3, '#f1f5f9');
+  pedSideGrad.addColorStop(0.7, '#e2e8f0');
+  pedSideGrad.addColorStop(1,   '#94a3b8');
+
+  ctx.fillStyle = pedSideGrad;
+  ctx.beginPath();
+  ctx.ellipse(screenX, baseY + pedStepH, pedW, pedRy, 0, 0, Math.PI);
+  ctx.lineTo(screenX - pedW, baseY);
+  ctx.ellipse(screenX, baseY, pedW, pedRy, 0, Math.PI, 0, true);
+  ctx.closePath();
+  ctx.fill();
+
+  // Base bisel inferior con anillo LED Milkit Cyan
+  ctx.strokeStyle = 'rgba(58, 181, 247, 0.4)';
+  ctx.lineWidth   = 2;
+  ctx.beginPath();
+  ctx.ellipse(screenX, baseY + pedStepH, pedW, pedRy, 0, 0, Math.PI);
+  ctx.stroke();
+
+  // Cara superior del pedestal (elipse satinada)
+  const pedTopGrad = ctx.createRadialGradient(screenX - pedW * 0.2, baseY - pedRy * 0.2, 5, screenX, baseY, pedW);
+  pedTopGrad.addColorStop(0,   '#ffffff');
+  pedTopGrad.addColorStop(0.7, '#f1f5f9');
+  pedTopGrad.addColorStop(1,   '#e2e8f0');
+  ctx.fillStyle = pedTopGrad;
+  ctx.beginPath();
+  ctx.ellipse(screenX, baseY, pedW, pedRy, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+  ctx.lineWidth   = 1.5;
+  ctx.stroke();
+
+  // Sombra de contacto de la Vaquita sobre la superficie del pedestal
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.35)';
+  ctx.beginPath();
+  ctx.ellipse(screenX, baseY - 2, sprW * 0.38, pedRy * 0.45, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── 3. Aura Milkit etérea y suave ──────────────────────────
+  const aura = ctx.createRadialGradient(screenX, baseY - sprH * 0.5, 0, screenX, baseY - sprH * 0.5, sprH * 0.65);
+  aura.addColorStop(0,   'rgba(250,97,162,0.18)');   // --hot rosa
+  aura.addColorStop(0.4, 'rgba(58,181,247,0.08)');   // --accent cyan
   aura.addColorStop(1,   'transparent');
   ctx.fillStyle = aura;
-  ctx.fillRect(col0 - 24, sprTop - 24, sprW + 48, sprH + 48);
+  ctx.fillRect(screenX - sprW, sprTop - 20, sprW * 2, sprH + 40);
 
-  // Sprite o fallback
+  // ── 4. Respiración / Suspensión sutil del Sprite ───────────
+  const breath = Math.sin(performance.now() * 0.0025) * (sprH * 0.015);
+  const drawY  = sprTop - 4 + breath;
+
   if (avatarSprite.complete && avatarSprite.naturalWidth > 0) {
     ctx.drawImage(avatarSprite,
-      screenX - sprW / 2, sprTop,
+      screenX - sprW / 2, drawY,
       sprW, sprH
     );
   } else {
-    // Fallback: rectángulo rosa con texto
-    ctx.fillStyle   = 'rgba(250,97,162,0.85)';
+    // Fallback: avatar estilizado
+    ctx.fillStyle   = 'rgba(250,97,162,0.9)';
     ctx.shadowColor = '#FA61A2';
-    ctx.shadowBlur  = 22;
-    ctx.fillRect(screenX - sprW / 2, sprTop, sprW, sprH);
+    ctx.shadowBlur  = 16;
+    ctx.fillRect(screenX - sprW / 2, drawY, sprW, sprH);
     ctx.shadowBlur  = 0;
     ctx.fillStyle   = '#fff';
-    ctx.font        = `${Math.round(sprH * 0.12)}px monospace`;
+    ctx.font        = `700 ${Math.round(sprH * 0.12)}px 'Poppins', sans-serif`;
     ctx.textAlign   = 'center';
-    ctx.fillText('Vaquita', screenX, sprTop + sprH * 0.55);
+    ctx.fillText('Milkit', screenX, drawY + sprH * 0.55);
   }
 
   ctx.restore();
