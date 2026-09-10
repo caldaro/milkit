@@ -11,7 +11,7 @@
   <!-- Favicon & Touch Icon -->
   <link rel="icon" type="image/png" href="https://milkit.click/logomilkit.png"/>
   <link rel="apple-touch-icon" href="https://milkit.click/logomilkit.png"/>
-  <link rel="image_src" href="https://milkit.click/og-thumb.png"/>
+  <link rel="image_src" href="https://milkit.click/og-thumb.jpg"/>
 
   <!-- Open Graph / WhatsApp / Facebook -->
   <meta property="og:type" content="website"/>
@@ -19,19 +19,23 @@
   <meta property="og:site_name" content="Milkit Multimedia"/>
   <meta property="og:title" content="Milkit · Soluciones Multimedia &amp; MarkOS"/>
   <meta property="og:description" content="Infraestructura Comercial B2B, MarkOS, Soluciones Creativas, SEO, ADS y Producción Audiovisual 3D."/>
-  <meta property="og:image" content="https://milkit.click/og-image.png"/>
-  <meta property="og:image:secure_url" content="https://milkit.click/og-image.png"/>
-  <meta property="og:image:type" content="image/png"/>
+  <meta property="og:image" content="https://milkit.click/og-image.jpg"/>
+  <meta property="og:image:secure_url" content="https://milkit.click/og-image.jpg"/>
+  <meta property="og:image:type" content="image/jpeg"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:image:alt" content="Milkit Multimedia Showroom Interactivo"/>
+  <meta property="og:image" content="https://milkit.click/og-thumb.jpg"/>
+  <meta property="og:image:type" content="image/jpeg"/>
+  <meta property="og:image:width" content="500"/>
+  <meta property="og:image:height" content="500"/>
 
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:url" content="https://milkit.click/"/>
   <meta name="twitter:title" content="Milkit · Soluciones Multimedia &amp; MarkOS"/>
   <meta name="twitter:description" content="Infraestructura Comercial B2B, MarkOS, Soluciones Creativas, SEO, ADS y Producción Audiovisual 3D."/>
-  <meta name="twitter:image" content="https://milkit.click/og-image.png"/>
+  <meta name="twitter:image" content="https://milkit.click/og-image.jpg"/>
 
   <!-- 1 request externo: tipografía Poppins para la marca -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -135,43 +139,55 @@
     /* ─── Lock Hint ───────────────────────────────── */
     #lock-hint {
       position: fixed;
-      bottom: 24px; left: 50%;
+      bottom: 20px;
+      left: 50%;
       transform: translateX(-50%);
-      font-size: 0.75rem;
+      font-family: var(--font);
+      font-size: 11.5px;
       font-weight: 600;
-      letter-spacing: 0.08em;
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.94);
-      padding: 10px 24px;
-      border: 1px solid rgba(58, 181, 247, 0.4);
-      border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      letter-spacing: 0.06em;
+      color: #CBD5E1;
+      background: rgba(8, 14, 28, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 8px 22px;
+      border: 1px solid rgba(58, 181, 247, 0.45);
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
       z-index: 100;
-      transition: opacity 0.4s;
+      transition: opacity 0.35s ease;
       pointer-events: none;
+      user-select: none;
     }
 
     /* ─── Toast Notification ──────────────────────── */
     #notification {
       position: fixed;
-      top: 24px; left: 50%;
+      top: 24px;
+      left: 50%;
       transform: translateX(-50%);
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.98);
-      border: 2px solid var(--accent);
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-      padding: 12px 30px;
-      border-radius: 8px;
-      z-index: 150;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #FFFFFF;
+      background: rgba(8, 14, 28, 0.95);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid #3AB5F7;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), 0 0 24px rgba(58, 181, 247, 0.35);
+      padding: 10px 26px;
+      border-radius: 24px;
+      z-index: 250;
       opacity: 0;
-      transition: opacity 0.35s;
+      transition: opacity 0.3s ease, transform 0.3s ease;
       pointer-events: none;
       white-space: nowrap;
     }
-    #notification.show { opacity: 1; }
+    #notification.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(4px);
+    }
 
     /* ─── Botón Flotante de Paleta ────────────────── */
     #palette-btn {
@@ -212,17 +228,18 @@
       transition: opacity 0.45s ease;
     }
 
-    /* ─── Milkit Modal Overlay (Light Theme) ──────── */
+    /* ─── Milkit Modal Overlay (Obsidian Dark Glass) ─── */
     #markos-modal {
       position: fixed; inset: 0;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(14px);
+      background: radial-gradient(circle at 50% 10%, rgba(14, 24, 46, 0.98), rgba(4, 7, 15, 0.99) 70%);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       z-index: 300;
       display: none;
       opacity: 0;
       transition: opacity 0.35s ease;
       overflow-y: auto;
-      color: var(--text);
+      color: #F8FAFC;
       padding: 40px 24px;
     }
     #markos-modal.active {
@@ -244,7 +261,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       padding-bottom: 18px;
     }
     .modal-title-wrap {
@@ -264,27 +281,27 @@
       background: rgba(58, 181, 247, 0.08);
     }
     .modal-close-btn {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #F8FAFC;
       font-family: var(--font);
       font-size: 0.82rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.06em;
       padding: 10px 20px;
       cursor: pointer;
-      border-radius: 6px;
+      border-radius: 8px;
       transition: all 0.2s;
     }
     .modal-close-btn:hover {
       background: var(--hot);
       color: #fff;
       border-color: var(--hot);
-      box-shadow: 0 4px 14px rgba(250, 97, 162, 0.3);
+      box-shadow: 0 4px 18px rgba(250, 97, 162, 0.4);
     }
     .hero-pitch h1 {
       font-size: clamp(1.8rem, 4vw, 2.8rem);
-      color: var(--text);
+      color: #FFFFFF;
       font-weight: 800;
       letter-spacing: -0.02em;
       margin-bottom: 12px;
@@ -292,12 +309,12 @@
     }
     .hero-pitch h1 span {
       color: var(--accent);
-      text-shadow: none;
+      text-shadow: 0 0 20px rgba(58, 181, 247, 0.4);
     }
     .hero-pitch p.lead {
       font-size: 1.05rem;
-      color: #4a5568;
-      line-height: 1.6;
+      color: #94A3B8;
+      line-height: 1.65;
       max-width: 860px;
     }
     .grid-engines {
@@ -306,18 +323,20 @@
       gap: 20px;
     }
     .engine-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
+      background: rgba(14, 24, 46, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
       padding: 24px;
       transition: all 0.25s;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .engine-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
     }
     .engine-card h3 {
       font-size: 1.1rem;
@@ -326,10 +345,10 @@
     }
     .engine-card .engine-sub {
       font-size: 0.72rem;
-      font-weight: 600;
-      color: #718096;
+      font-weight: 700;
+      color: #64748B;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       margin-bottom: 14px;
     }
     .engine-card ul {
@@ -338,8 +357,11 @@
       flex-direction: column;
       gap: 10px;
       font-size: 0.88rem;
-      color: #4a5568;
-      line-height: 1.45;
+      color: #CBD5E1;
+      line-height: 1.5;
+    }
+    .engine-card ul li strong {
+      color: #FFFFFF;
     }
     .engine-card ul li::before {
       content: '▶ ';
@@ -350,10 +372,11 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 16px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
+      background: rgba(14, 24, 46, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
       padding: 22px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.25);
     }
     .tele-stat {
       display: flex;
@@ -367,20 +390,20 @@
     .tele-lbl {
       font-size: 0.72rem;
       font-weight: 600;
-      color: #718096;
+      color: #94A3B8;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
     .comparison-section {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
+      background: rgba(14, 24, 46, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
       padding: 28px;
     }
     .comparison-section h2 {
       font-size: 1.2rem;
       font-weight: 800;
-      color: var(--text);
+      color: #FFFFFF;
       letter-spacing: -0.01em;
       margin-bottom: 20px;
     }
@@ -397,38 +420,39 @@
       font-weight: 700;
       margin-bottom: 12px;
     }
-    .comp-col.bad h4 { color: #e53e3e; }
-    .comp-col.good h4 { color: #319795; }
+    .comp-col.bad h4 { color: #F87171; }
+    .comp-col.good h4 { color: #34D399; }
     .comp-col ul {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 10px;
       font-size: 0.88rem;
-      color: #4a5568;
+      color: #CBD5E1;
     }
-    .comp-col.bad ul li::before { content: '✕ '; color: #e53e3e; font-weight: bold; }
-    .comp-col.good ul li::before { content: '✓ '; color: #319795; font-weight: bold; }
+    .comp-col.bad ul li::before { content: '✕ '; color: #F87171; font-weight: bold; }
+    .comp-col.good ul li::before { content: '✓ '; color: #34D399; font-weight: bold; }
     .cta-banner {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 16px;
-      background: #f0f9ff;
-      border: 1px solid rgba(58, 181, 247, 0.4);
-      border-radius: 10px;
+      background: radial-gradient(circle at 50% 0%, rgba(58, 181, 247, 0.12), rgba(8, 14, 28, 0.85) 80%);
+      border: 1.5px solid rgba(58, 181, 247, 0.45);
+      box-shadow: 0 0 35px rgba(58, 181, 247, 0.15);
+      border-radius: 12px;
       padding: 40px 24px;
       text-align: center;
     }
     .cta-banner h2 {
       font-size: 1.5rem;
       font-weight: 800;
-      color: var(--text);
+      color: #FFFFFF;
     }
     .cta-banner p {
       max-width: 620px;
       font-size: 0.98rem;
-      color: #4a5568;
+      color: #94A3B8;
       line-height: 1.6;
     }
     .cta-buttons {
@@ -441,10 +465,10 @@
     .btn-primary-cta {
       background: var(--accent);
       border: none;
-      color: #ffffff;
+      color: #01030a;
       font-family: var(--font);
       font-size: 0.9rem;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.08em;
       padding: 14px 32px;
       border-radius: 8px;
@@ -455,12 +479,12 @@
     .btn-primary-cta:hover {
       background: #259fe2;
       transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(58, 181, 247, 0.45);
+      box-shadow: 0 6px 22px rgba(58, 181, 247, 0.55);
     }
     .btn-secondary-cta {
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #F8FAFC;
       font-family: var(--font);
       font-size: 0.9rem;
       font-weight: 600;
@@ -471,8 +495,9 @@
       transition: all 0.2s;
     }
     .btn-secondary-cta:hover {
-      background: #f8fafc;
-      border-color: #94a3b8;
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+      color: #FFFFFF;
     }
 
     /* ─── Mobile Touch Controls ──────────────────── */
@@ -489,9 +514,9 @@
     .touch-btn {
       position: absolute;
       pointer-events: auto;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1.5px solid rgba(58, 181, 247, 0.45);
-      color: var(--text);
+      background: rgba(8, 14, 28, 0.85);
+      border: 1.5px solid rgba(58, 181, 247, 0.5);
+      color: #F8FAFC;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -500,12 +525,13 @@
       -webkit-user-select: none;
       touch-action: manipulation;
       font-size: 1.2rem;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
       backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .touch-btn:active {
       background: var(--accent);
-      color: #fff;
+      color: #01030a;
       border-color: var(--accent);
     }
     #touch-fwd   { bottom: 95px; left: 65px; width: 50px; height: 50px; }
@@ -517,19 +543,21 @@
       bottom: 35px; right: 20px;
       padding: 14px 20px;
       border-radius: 10px;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(8, 14, 28, 0.88);
       border: 2px solid var(--hot);
       font-family: var(--font);
       font-size: 0.8rem;
       font-weight: 800;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--hot);
+      color: #FA61A2;
       pointer-events: auto;
       user-select: none;
       -webkit-user-select: none;
       touch-action: manipulation;
-      box-shadow: 0 4px 16px rgba(250, 97, 162, 0.25);
+      box-shadow: 0 4px 18px rgba(250, 97, 162, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     #touch-interact:active {
       background: var(--hot);
@@ -670,40 +698,242 @@
       letter-spacing: 0.08em;
     }
 
-    /* Pantallas Creativas / Blancas */
-    .kiosk-screen-3d.creative,
-    .kiosk-screen-3d.seo,
-    .kiosk-screen-3d.multimedia {
-      background: rgba(255, 255, 255, 0.98);
-      border: 2px solid rgba(226, 232, 240, 0.9);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      color: #0F172A;
+    /* ─── Pantalla 1: Milkit Creativas (Hot Pink) ─── */
+    .kiosk-screen-3d.creative {
+      background: radial-gradient(circle at 50% 0%, rgba(38, 14, 28, 0.98), rgba(8, 8, 16, 0.99) 75%);
+      border: 2px solid rgba(250, 97, 162, 0.85);
+      box-shadow: 0 0 35px rgba(250, 97, 162, 0.35), inset 0 0 25px rgba(250, 97, 162, 0.12);
+      color: #fff;
     }
-    .kiosk-screen-3d .kiosk-badge.creative { background: rgba(250, 97, 162, 0.12); border: 1px solid #FA61A2; color: #FA61A2; font-size: 12px; font-weight: 800; border-radius: 20px; padding: 5px 16px; align-self: center; }
-    .kiosk-screen-3d .kiosk-badge.seo { background: rgba(144, 89, 200, 0.12); border: 1px solid #9059C8; color: #9059C8; font-size: 12px; font-weight: 800; border-radius: 20px; padding: 5px 16px; align-self: center; }
-    .kiosk-screen-3d .kiosk-badge.multimedia { background: rgba(242, 201, 76, 0.15); border: 1px solid #F2C94C; color: #B45309; font-size: 12px; font-weight: 800; border-radius: 20px; padding: 5px 16px; align-self: center; }
-    
-    .kiosk-screen-3d .kiosk-title.creative,
-    .kiosk-screen-3d .kiosk-title.seo,
-    .kiosk-screen-3d .kiosk-title.multimedia { color: #0F172A; font-size: 30px; font-weight: 800; text-align: center; margin: 4px 0 0; }
-    .kiosk-screen-3d .kiosk-sub.creative,
-    .kiosk-screen-3d .kiosk-sub.seo,
-    .kiosk-screen-3d .kiosk-sub.multimedia { color: #64748B; font-size: 13px; font-weight: 600; text-align: center; margin-bottom: 10px; }
-
-    .kiosk-screen-3d.creative .k-chip,
-    .kiosk-screen-3d.seo .k-chip,
-    .kiosk-screen-3d.multimedia .k-chip {
-      background: rgba(241, 245, 249, 0.95);
-      border: 1px solid #E2E8F0;
+    .kiosk-screen-3d .kiosk-badge.creative {
+      background: rgba(250, 97, 162, 0.18);
+      border: 1.5px solid #FA61A2;
+      color: #FA61A2;
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 20px;
+      padding: 6px 18px;
+      align-self: center;
+      letter-spacing: 0.12em;
+    }
+    .kiosk-screen-3d.creative .kiosk-brand {
+      text-align: center;
+      color: #FA61A2;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+    .kiosk-screen-3d .kiosk-title.creative {
+      color: #FFFFFF;
+      font-size: 34px;
+      font-weight: 900;
+      text-align: center;
+      margin: 2px 0 0;
+      letter-spacing: -0.01em;
+    }
+    .kiosk-screen-3d .kiosk-sub.creative {
+      color: #94A3B8;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .kiosk-screen-3d.creative .k-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(250, 97, 162, 0.30);
       border-radius: 10px;
       padding: 9px 14px;
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 600;
-      color: #334155;
+      color: #F1F5F9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .kiosk-screen-3d.creative .kiosk-btn { background: #FA61A2; border: none; color: #fff; font-family: var(--font); font-size: 14px; font-weight: 800; padding: 13px; border-radius: 12px; cursor: pointer; }
-    .kiosk-screen-3d.seo .kiosk-btn { background: #9059C8; border: none; color: #fff; font-family: var(--font); font-size: 14px; font-weight: 800; padding: 13px; border-radius: 12px; cursor: pointer; }
-    .kiosk-screen-3d.multimedia .kiosk-btn { background: #F2C94C; border: none; color: #000; font-family: var(--font); font-size: 14px; font-weight: 800; padding: 13px; border-radius: 12px; cursor: pointer; }
+    .kiosk-screen-3d.creative .k-chip span { color: #FA61A2; font-size: 14px; }
+    .kiosk-screen-3d.creative .kiosk-btn {
+      background: linear-gradient(90deg, #FA61A2, #9059C8);
+      border: none;
+      color: #FFFFFF;
+      font-family: var(--font);
+      font-size: 14.5px;
+      font-weight: 800;
+      padding: 13px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(250, 97, 162, 0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kiosk-screen-3d.creative .kiosk-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 26px rgba(250, 97, 162, 0.65);
+    }
+    .kiosk-screen-3d.creative .kiosk-footer {
+      text-align: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── Pantalla 2: SEO / Emailing / ADS (Purple) ─── */
+    .kiosk-screen-3d.seo {
+      background: radial-gradient(circle at 50% 0%, rgba(26, 14, 44, 0.98), rgba(8, 8, 16, 0.99) 75%);
+      border: 2px solid rgba(144, 89, 200, 0.85);
+      box-shadow: 0 0 35px rgba(144, 89, 200, 0.35), inset 0 0 25px rgba(144, 89, 200, 0.12);
+      color: #fff;
+    }
+    .kiosk-screen-3d .kiosk-badge.seo {
+      background: rgba(144, 89, 200, 0.18);
+      border: 1.5px solid #9059C8;
+      color: #C084FC;
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 20px;
+      padding: 6px 18px;
+      align-self: center;
+      letter-spacing: 0.12em;
+    }
+    .kiosk-screen-3d.seo .kiosk-brand {
+      text-align: center;
+      color: #C084FC;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+    .kiosk-screen-3d .kiosk-title.seo {
+      color: #FFFFFF;
+      font-size: 34px;
+      font-weight: 900;
+      text-align: center;
+      margin: 2px 0 0;
+      letter-spacing: -0.01em;
+    }
+    .kiosk-screen-3d .kiosk-sub.seo {
+      color: #94A3B8;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .kiosk-screen-3d.seo .k-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(144, 89, 200, 0.30);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #F1F5F9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .kiosk-screen-3d.seo .k-chip span { color: #C084FC; font-size: 14px; }
+    .kiosk-screen-3d.seo .kiosk-btn {
+      background: linear-gradient(90deg, #9059C8, #3AB5F7);
+      border: none;
+      color: #FFFFFF;
+      font-family: var(--font);
+      font-size: 14.5px;
+      font-weight: 800;
+      padding: 13px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(144, 89, 200, 0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kiosk-screen-3d.seo .kiosk-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 26px rgba(144, 89, 200, 0.65);
+    }
+    .kiosk-screen-3d.seo .kiosk-footer {
+      text-align: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── Pantalla 3: Multimedia / 3D (Amber/Gold) ─── */
+    .kiosk-screen-3d.multimedia {
+      background: radial-gradient(circle at 50% 0%, rgba(38, 28, 10, 0.98), rgba(8, 8, 16, 0.99) 75%);
+      border: 2px solid rgba(242, 201, 76, 0.85);
+      box-shadow: 0 0 35px rgba(242, 201, 76, 0.35), inset 0 0 25px rgba(242, 201, 76, 0.12);
+      color: #fff;
+    }
+    .kiosk-screen-3d .kiosk-badge.multimedia {
+      background: rgba(242, 201, 76, 0.18);
+      border: 1.5px solid #F2C94C;
+      color: #F2C94C;
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 20px;
+      padding: 6px 18px;
+      align-self: center;
+      letter-spacing: 0.12em;
+    }
+    .kiosk-screen-3d.multimedia .kiosk-brand {
+      text-align: center;
+      color: #F2C94C;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+    .kiosk-screen-3d .kiosk-title.multimedia {
+      color: #FFFFFF;
+      font-size: 34px;
+      font-weight: 900;
+      text-align: center;
+      margin: 2px 0 0;
+      letter-spacing: -0.01em;
+    }
+    .kiosk-screen-3d .kiosk-sub.multimedia {
+      color: #94A3B8;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .kiosk-screen-3d.multimedia .k-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(242, 201, 76, 0.30);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #F1F5F9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .kiosk-screen-3d.multimedia .k-chip span { color: #F2C94C; font-size: 14px; }
+    .kiosk-screen-3d.multimedia .kiosk-btn {
+      background: linear-gradient(90deg, #F2C94C, #FA61A2);
+      border: none;
+      color: #000000;
+      font-family: var(--font);
+      font-size: 14.5px;
+      font-weight: 800;
+      padding: 13px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(242, 201, 76, 0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kiosk-screen-3d.multimedia .kiosk-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 26px rgba(242, 201, 76, 0.65);
+    }
+    .kiosk-screen-3d.multimedia .kiosk-footer {
+      text-align: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.08em;
+    }
 
     /* Vaquita 3D Billboard */
     .vaquita-3d-billboard {

@@ -1123,8 +1123,10 @@ function renderHUD() {
   ctx.moveTo(W2, H2-cs); ctx.lineTo(W2, H2+cs);
   ctx.stroke();
 
-  // ── 2. Label de pantalla en hover (Tarjeta anclada inferior, nunca tapa el centro) ──
-  if (onScreen) {
+  // ── 2. Label de pantalla en hover ──────────────────
+  // En modo CSS 3D, la pantalla interactiva ya muestra su tarjeta 4K y botón directamente en 3D.
+  // Solo dibujamos la tarjeta 2D flotante en modo Canvas clásico (fallback).
+  if (onScreen && !CFG.USE_CSS3D_SCREENS) {
     const scr = hoveredScreen;
     const [r, g, b] = scr.rgb;
     const isFlag = !!scr.flagship;
@@ -1132,7 +1134,6 @@ function renderHUD() {
     const lW  = clamp(Math.round(scr.label.length * 9.5 + 70), 300, Math.min(540, Math.round(W * 0.88)));
     const lH  = isFlag ? 92 : 76;
     const lX  = W2 - lW / 2;
-    // Posicionamiento inferior limpio: no bloquea ni el centro ni la Vaquita
     const lY  = isTouchDevice ? Math.max(H2 + 40, H - lH - 95) : (H - lH - 26);
 
     ctx.fillStyle = isFlag ? 'rgba(8, 12, 22, 0.96)' : 'rgba(255, 255, 255, 0.96)';
@@ -1183,16 +1184,16 @@ function renderHUD() {
   // ── 3. Horizonte luminoso ──────────────────────────
   const hg = ctx.createLinearGradient(W2-260, H2, W2+260, H2);
   hg.addColorStop(0,    'transparent');
-  hg.addColorStop(0.38, 'rgba(58,181,247,0.15)');
-  hg.addColorStop(0.62, 'rgba(58,181,247,0.15)');
+  hg.addColorStop(0.38, 'rgba(58,181,247,0.20)');
+  hg.addColorStop(0.62, 'rgba(58,181,247,0.20)');
   hg.addColorStop(1,    'transparent');
   ctx.fillStyle = hg;
   ctx.fillRect(0, H2, W, 1);
 
-  // ── 4. Viñeta luminosa suave ──────────────────────
-  const vig = ctx.createRadialGradient(W2, H2, H*0.3, W2, H2, H*0.85);
+  // ── 4. Viñeta cinematográfica oscura ───────────────
+  const vig = ctx.createRadialGradient(W2, H2, H*0.35, W2, H2, H*0.90);
   vig.addColorStop(0,  'transparent');
-  vig.addColorStop(1,  'rgba(255,255,255,0.25)');
+  vig.addColorStop(1,  'rgba(3, 6, 14, 0.48)');
   ctx.fillStyle = vig;
   ctx.fillRect(0, 0, W, H);
 
@@ -1203,9 +1204,9 @@ function renderHUD() {
 function renderCompass() {
   const cx = W-58, cy = 58, r = 28;
   ctx.save();
-  ctx.globalAlpha = 0.85;
+  ctx.globalAlpha = 0.90;
 
-  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.fillStyle = 'rgba(8, 14, 28, 0.88)';
   ctx.beginPath(); ctx.arc(cx, cy, r+7, 0, Math.PI*2); ctx.fill();
 
   // Contorno dodecagonal del minimapa (estético)
