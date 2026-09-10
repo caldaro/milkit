@@ -1,0 +1,50 @@
+[
+  {
+    "id": "angel-verdu",
+    "name": "Ángel Verdú Ortiz",
+    "role": "Asesor de Arquitectura de Sistemas",
+    "img_url": "https://media.licdn.com/dms/image/v2/C4D03AQHw1cQ-R8U6aQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1619997244418?e=2147483647&v=beta&t=BesHx2pOYErO2Y8IZ-gxOzaA2iy3KM4g-inBa5V-wFc",
+    "linkedin": "https://www.linkedin.com/in/angelverdu/",
+    "headline": "Senior Software Architect & Systems Engineer",
+    "bio": "Más de 21 años de trayectoria liderando infraestructuras de misión crítica, ingeniería electrónica y sistemas distribuidos en Epiphan Video y Nearby Computing.",
+    "badge": "SISTEMAS & ARQUITECTURA",
+    "color": "#3AB5F7",
+    "local_img": "assets/advisors/angel-verdu.jpg"
+  },
+  {
+    "id": "maria-alejandra-vasquez",
+    "name": "María Alejandra Vásquez",
+    "role": "Asesora de Proyectos",
+    "img_url": "https://media.licdn.com/dms/image/v2/C4E03AQE-zGXXowHJPg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1517478520884?e=2147483647&v=beta&t=XQ8Rx4ukR-7gFkqxhQLE0TTTnM51BPOnDxIXbzRn_n0",
+    "linkedin": "https://www.linkedin.com/in/maria-alejandra-vasquez-majano-937b0b91/",
+    "headline": "Project Management & Strategic Operations Director",
+    "bio": "Especialista en planificación, gobernanza operativa y ejecución de proyectos de gran envergadura (UCLA, Organización El Tunal).",
+    "badge": "GESTIÓN & ESTRATEGIA",
+    "color": "#FA61A2",
+    "local_img": "assets/advisors/maria-alejandra-vasquez.jpg"
+  },
+  {
+    "id": "leafar-alvarez",
+    "name": "Leafar Álvarez",
+    "role": "Asesor de Arte",
+    "img_url": "https://media.licdn.com/dms/image/v2/C5603AQG7zVe8_Zk-yg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1568061657388?e=2147483647&v=beta&t=tx6O79irNHus3cnYpcsuCJZupNE8-IDIwHS-3bES9r0",
+    "linkedin": "https://www.linkedin.com/in/leafar-alvarez-73873b139/",
+    "headline": "Senior Art Director & Visual Identity Specialist",
+    "bio": "Más de 15 años definiendo universos visuales, dirección estética, fotografía de autor y producción artística transmedia (CIDIG).",
+    "badge": "DIRECCIÓN DE ARTE",
+    "color": "#C084FC",
+    "local_img": "assets/advisors/leafar-alvarez.jpg"
+  },
+  {
+    "id": "eduardo-garcia",
+    "name": "Eduardo García",
+    "role": "Asesor Cinematográfico",
+    "img_url": "https://media.licdn.com/dms/image/v2/C5603AQE8IjekPjNhNw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1516661604357?e=2147483647&v=beta&t=Dxxuqf3E-wwr26ktNuYZ7tdh2w-E1HtDx4zgQ2FMj7k",
+    "linkedin": "https://www.linkedin.com/in/eduardo-garc%C3%ADa-7253a237/",
+    "headline": "Cinematographer, Filmmaker & Senior Content Director",
+    "bio": "Más de 15 años en dirección cinematográfica, narrativa visual comercial y postproducción de calidad de emisión (ULA, Autolider / Inchcape).",
+    "badge": "CINE & AUDIOVISUAL",
+    "color": "#F2C94C",
+    "local_img": "assets/advisors/eduardo-garcia.jpg"
+  }
+]

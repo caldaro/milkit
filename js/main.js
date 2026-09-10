@@ -140,12 +140,13 @@ const EDGES = (() => {
   for (let i = 0; i < N; i++) {
     const a = VERTS[i];
     const b = VERTS[(i + 1) % N];
-    // Aristas con pantallas: 0 (Milkit Creativas), 3, 5, 8
+    // Aristas con pantallas: 0 (MarkOS Flagship), 3 (Milkit Creativas), 5 (SEO), 8 (Multimedia 3D), 10 (Consejo Asesor)
     let type = 'wall', screenIdx = -1;
-    if      (i === 0)  { type = 'screen'; screenIdx = 0; }  // Soluciones Creativas
-    else if (i === 3)  { type = 'screen'; screenIdx = 1; }  // SEO / Emailing / ADS
-    else if (i === 5)  { type = 'screen'; screenIdx = 2; }  // Diseño Multimedia
-    else if (i === 8)  { type = 'screen'; screenIdx = 3; }  // Streaming / Apps / UX
+    if      (i === 0)  { type = 'screen'; screenIdx = 0; }  // MarkOS · Producto Estrella B2B
+    else if (i === 3)  { type = 'screen'; screenIdx = 1; }  // Milkit · Soluciones Creativas
+    else if (i === 5)  { type = 'screen'; screenIdx = 2; }  // SEO / Emailing / ADS
+    else if (i === 8)  { type = 'screen'; screenIdx = 3; }  // Diseño Multimedia 3D
+    else if (i === 10) { type = 'screen'; screenIdx = 4; }  // Consejo Asesor (Advisory Board)
     edges.push({ a, b, type, screenIdx, idx: i });
   }
   return edges;
@@ -160,41 +161,60 @@ function edgeCenterAngle(edge) {
 
 
 // ══════════════════════════════════════════════════════
-// §3  PANTALLAS — PORTAFOLIO
+// §3  PANTALLAS — PORTAFOLIO & PRODUCTO ESTRELLA
 // ══════════════════════════════════════════════════════
 const SCREENS = [
   {
-    id:      'milkit-creativas',
-    label:   'Milkit · Soluciones Creativas',
-    sub:     'Estrategia · Branding · Contenido · Campañas 360°',
-    rgb:     [58, 181, 247],   // --accent cyan
-    primary: true,
-    tagline: 'Tu marca no necesita más likes. Necesita resultados.',
-    cta:     'Ver Portafolio',
+    id:       'markos',
+    label:    'MarkOS · Growth OS',
+    sub:      'Omni-Channel · Search Dominance · CRM · Data Core',
+    rgb:      [58, 181, 247],   // --accent cyan
+    primary:  true,
+    flagship: true,
+    badge:    '★ PRODUCTO ESTRELLA',
+    tagline:  'No contrates una agencia. Instala una infraestructura.',
+    cta:      'DESPLEGAR MARKOS',
   },
   {
-    id:      'milkit-seo',
-    label:   'SEO · Emailing · ADS',
-    sub:     'Google Ads · Meta · Email Flows · Embudos Directos',
-    rgb:     [250, 97, 162],   // --hot rosa
-    primary: false,
-    cta:     'Ver Estrategias',
+    id:       'milkit-creativas',
+    label:    'Milkit · Soluciones Creativas',
+    sub:      'Estrategia · Branding · Contenido · Campañas 360°',
+    rgb:      [58, 181, 247],   // --accent cyan
+    primary:  false,
+    flagship: false,
+    badge:    'ESTUDIO CREATIVO',
+    tagline:  'Tu marca no necesita más likes. Necesita resultados.',
+    cta:      'EXPLORAR ESTUDIO',
   },
   {
-    id:      'milkit-multimedia',
-    label:   'Diseño Multimedia & Motion',
-    sub:     'Motion Graphics · Video Corporativo · Spots 3D',
-    rgb:     [144, 89, 200],   // --purple
-    primary: false,
-    cta:     'Explorar Producción',
+    id:       'milkit-seo',
+    label:    'SEO · Emailing · ADS',
+    sub:      'Google Ads · Meta · Email Flows · Embudos Directos',
+    rgb:      [250, 97, 162],   // --hot rosa
+    primary:  false,
+    flagship: false,
+    badge:    'GROWTH & PERFORMANCE',
+    cta:      'VER ESTRATEGIAS',
   },
   {
-    id:      'milkit-digital',
-    label:   'Streaming · Apps · UX/UI',
-    sub:     'Front-End · React · Live Streaming · Experiencias Digitales',
-    rgb:     [242, 201, 76],   // --yellow
-    primary: false,
-    cta:     'Conocer Labs',
+    id:       'milkit-multimedia',
+    label:    'Diseño Multimedia & Motion 3D',
+    sub:      'Motion Graphics · Video Corporativo · Spots 3D',
+    rgb:      [144, 89, 200],   // --purple
+    primary:  false,
+    flagship: false,
+    badge:    'PRODUCCIÓN AUDIOVISUAL',
+    cta:      'EXPLORAR PRODUCCIÓN',
+  },
+  {
+    id:       'milkit-advisors',
+    label:    'Consejo Asesor · Advisory Board',
+    sub:      'Arquitectura de Sistemas · Gestión · Arte · Cinematografía',
+    rgb:      [242, 201, 76],   // --yellow
+    primary:  false,
+    flagship: false,
+    badge:    'CONSEJO CONSULTIVO',
+    cta:      'CONOCER ASESORES',
   },
 ];
 
@@ -452,8 +472,172 @@ function buildScreenTexture(scr) {
   c.fillStyle = bgGrad;
   c.fillRect(0, 0, TEX_W, TEX_H);
 
-  // ── Pantalla principal: Milkit Creativas especial ────
-  if (scr.primary && scr.tagline) {
+  // ── Pantalla Producto Estrella: MarkOS ────────────────
+  if (scr.flagship) {
+    // Fondo obsidian dark tech
+    c.fillStyle = '#060A14';
+    c.fillRect(0, 0, TEX_W, TEX_H);
+
+    // Glow ambiental cyan/oro
+    const g1 = c.createRadialGradient(TEX_W / 2, 80, 10, TEX_W / 2, 80, 130);
+    g1.addColorStop(0, 'rgba(58, 181, 247, 0.28)');
+    g1.addColorStop(1, 'transparent');
+    c.fillStyle = g1;
+    c.fillRect(0, 0, TEX_W, TEX_H);
+
+    // Pill badge dorado
+    c.fillStyle = 'rgba(242, 201, 76, 0.16)';
+    roundRect(c, TEX_W / 2 - 62, 14, 124, 18, 9);
+    c.fill();
+    c.strokeStyle = '#F2C94C';
+    c.lineWidth   = 1;
+    roundRect(c, TEX_W / 2 - 62, 14, 124, 18, 9);
+    c.stroke();
+
+    c.fillStyle    = '#F2C94C';
+    c.textAlign    = 'center';
+    c.textBaseline = 'middle';
+    c.font         = `800 7.5px 'Poppins', sans-serif`;
+    c.fillText('★ PRODUCTO ESTRELLA', TEX_W / 2, 23);
+
+    // Marca B2B
+    c.fillStyle = '#38BDF8';
+    c.font      = `700 7px 'Poppins', sans-serif`;
+    c.fillText('MILKIT LABS · INFRAESTRUCTURA B2B', TEX_W / 2, 40);
+
+    // Título MarkOS
+    c.fillStyle = '#FFFFFF';
+    c.font      = `900 22px 'Poppins', sans-serif`;
+    c.fillText('MarkOS', TEX_W / 2, 62);
+
+    // Subtítulo
+    c.fillStyle = '#94A3B8';
+    c.font      = `500 7.5px 'Poppins', sans-serif`;
+    c.fillText('Sistema Operativo de Crecimiento Comercial', TEX_W / 2, 78);
+
+    // 4 Módulos
+    const modules = [
+      '⚡ Omni-Channel Content Engine',
+      '◉ Search Dominance & ADS',
+      '◎ CRM & Lead Orchestration',
+      '◈ Data & Telemetry Core'
+    ];
+    modules.forEach((m, i) => {
+      const my = 98 + i * 18;
+      c.fillStyle = 'rgba(15, 23, 42, 0.85)';
+      roundRect(c, 20, my - 7, TEX_W - 40, 15, 6);
+      c.fill();
+      c.strokeStyle = 'rgba(58, 181, 247, 0.35)';
+      c.lineWidth   = 0.8;
+      roundRect(c, 20, my - 7, TEX_W - 40, 15, 6);
+      c.stroke();
+
+      c.fillStyle = '#E2E8F0';
+      c.font      = `600 7.5px 'Poppins', sans-serif`;
+      c.textAlign = 'left';
+      c.fillText(m, 28, my + 0.5);
+    });
+
+    // Botón gradiente
+    const btnGrad = c.createLinearGradient(26, 178, TEX_W - 26, 178);
+    btnGrad.addColorStop(0, '#3AB5F7');
+    btnGrad.addColorStop(1, '#FA61A2');
+    c.fillStyle = btnGrad;
+    roundRect(c, 26, 174, TEX_W - 52, 24, 12);
+    c.fill();
+
+    c.fillStyle    = '#FFFFFF';
+    c.textAlign    = 'center';
+    c.font         = `800 8.5px 'Poppins', sans-serif`;
+    c.fillText('⚡ DESPLEGAR MARKOS →', TEX_W / 2, 186);
+
+    // Telemetría footer
+    c.fillStyle = '#64748B';
+    c.font      = `600 6.5px 'Poppins', sans-serif`;
+    c.fillText('PIPELINES: 14 ▲ · CAC: -42% ▼ · UPTIME: 99.9%', TEX_W / 2, 210);
+
+    c.fillStyle = '#38BDF8';
+    c.font      = `700 7.5px 'Poppins', sans-serif`;
+    c.fillText('● INFRAESTRUCTURA B2B EN VIVO', TEX_W / 2, 224);
+
+  } else if (scr.id === 'milkit-advisors') {
+    // ── Pantalla Consejo Asesor ─────────────────────────
+    c.fillStyle = '#080E1C';
+    c.fillRect(0, 0, TEX_W, TEX_H);
+
+    // Glow oro
+    const gAdv = c.createRadialGradient(TEX_W / 2, 80, 10, TEX_W / 2, 80, 130);
+    gAdv.addColorStop(0, 'rgba(242, 201, 76, 0.25)');
+    gAdv.addColorStop(1, 'transparent');
+    c.fillStyle = gAdv;
+    c.fillRect(0, 0, TEX_W, TEX_H);
+
+    // Pill badge dorado
+    c.fillStyle = 'rgba(242, 201, 76, 0.16)';
+    roundRect(c, TEX_W / 2 - 66, 14, 132, 18, 9);
+    c.fill();
+    c.strokeStyle = '#F2C94C';
+    c.lineWidth   = 1;
+    roundRect(c, TEX_W / 2 - 66, 14, 132, 18, 9);
+    c.stroke();
+
+    c.fillStyle    = '#F2C94C';
+    c.textAlign    = 'center';
+    c.textBaseline = 'middle';
+    c.font         = `800 7.5px 'Poppins', sans-serif`;
+    c.fillText('CONSEJO ASESOR SENIOR', TEX_W / 2, 23);
+
+    // Marca
+    c.fillStyle = '#94A3B8';
+    c.font      = `700 7px 'Poppins', sans-serif`;
+    c.fillText('MILKIT ADVISORY BOARD', TEX_W / 2, 40);
+
+    // Título
+    c.fillStyle = '#FFFFFF';
+    c.font      = `900 18px 'Poppins', sans-serif`;
+    c.fillText('Consejo Asesor', TEX_W / 2, 60);
+
+    // 4 Asesores
+    const advList = [
+      'Ángel Verdú · Sistemas & Arq.',
+      'M. Alejandra Vásquez · Proyectos',
+      'Leafar Álvarez · Arte & Diseño',
+      'Eduardo García · Cinematografía'
+    ];
+    advList.forEach((adv, i) => {
+      const ay = 88 + i * 20;
+      c.fillStyle = 'rgba(15, 23, 42, 0.85)';
+      roundRect(c, 20, ay - 7, TEX_W - 40, 16, 6);
+      c.fill();
+      c.strokeStyle = 'rgba(242, 201, 76, 0.35)';
+      c.lineWidth   = 0.8;
+      roundRect(c, 20, ay - 7, TEX_W - 40, 16, 6);
+      c.stroke();
+
+      c.fillStyle = '#E2E8F0';
+      c.font      = `600 7.5px 'Poppins', sans-serif`;
+      c.textAlign = 'left';
+      c.fillText(adv, 28, ay + 0.5);
+    });
+
+    // Botón dorado
+    const btnAdv = c.createLinearGradient(26, 178, TEX_W - 26, 178);
+    btnAdv.addColorStop(0, '#F2C94C');
+    btnAdv.addColorStop(1, '#FA61A2');
+    c.fillStyle = btnAdv;
+    roundRect(c, 26, 174, TEX_W - 52, 24, 12);
+    c.fill();
+
+    c.fillStyle    = '#000000';
+    c.textAlign    = 'center';
+    c.font         = `900 8px 'Poppins', sans-serif`;
+    c.fillText('👥 CONOCER ASESORES →', TEX_W / 2, 186);
+
+    c.fillStyle = '#94A3B8';
+    c.font      = `600 6.5px 'Poppins', sans-serif`;
+    c.fillText('AUDITORÍA TÉCNICA · GOBERNANZA SENIOR', TEX_W / 2, 214);
+
+  } else if (scr.primary && scr.tagline) {
     // Pill badge superior
     c.fillStyle = colA(0.14);
     roundRect(c, TEX_W / 2 - 54, 15, 108, 20, 10);
@@ -1021,31 +1205,38 @@ function renderHUD() {
   ctx.moveTo(W2, H2-cs); ctx.lineTo(W2, H2+cs);
   ctx.stroke();
 
-  // ── 2. Label de pantalla en hover ──────────────────
-  // En modo CSS 3D, la pantalla interactiva ya muestra su tarjeta 4K y botón directamente en 3D.
-  // Solo dibujamos la tarjeta 2D flotante en modo Canvas clásico (fallback).
-  if (onScreen && !CFG.USE_CSS3D_SCREENS) {
+  // ── 2. Label de pantalla en hover (Tarjeta flotante HUD interactiva) ────
+  if (onScreen) {
     const scr = hoveredScreen;
     const [r, g, b] = scr.rgb;
+    const isFlag = !!scr.flagship;
 
-    const lW  = clamp(Math.round(scr.label.length * 9.5 + 70), 300, Math.min(540, Math.round(W * 0.88)));
-    const lH  = 78;
+    const lW  = clamp(Math.round(scr.label.length * 9.5 + 75), 320, Math.min(560, Math.round(W * 0.88)));
+    const lH  = isFlag ? 90 : 76;
     const lX  = W2 - lW / 2;
-    const lY  = isTouchDevice ? Math.max(H2 + 40, H - lH - 95) : (H - lH - 26);
+    const lY  = isTouchDevice ? Math.max(H2 + 40, H - lH - 95) : (H - lH - 24);
 
-    ctx.fillStyle = 'rgba(8, 14, 28, 0.95)';
+    ctx.fillStyle = 'rgba(8, 14, 28, 0.96)';
     roundRect(ctx, lX, lY, lW, lH, 10);
     ctx.fill();
 
-    ctx.strokeStyle = `rgba(${r},${g},${b},0.85)`;
-    ctx.lineWidth   = 1.5;
+    ctx.strokeStyle = isFlag ? '#3AB5F7' : `rgba(${r},${g},${b},0.85)`;
+    ctx.lineWidth   = isFlag ? 2 : 1.5;
     ctx.stroke();
 
     // Barra superior
-    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillStyle = isFlag ? '#F2C94C' : `rgb(${r},${g},${b})`;
     ctx.fillRect(lX + 8, lY, lW - 16, 2.5);
 
-    let curY = lY + 20;
+    let curY = lY + (isFlag ? 17 : 20);
+    if (isFlag) {
+      ctx.fillStyle    = '#F2C94C';
+      ctx.font         = `700 8px 'Poppins', sans-serif`;
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('★ PRODUCTO ESTRELLA · INFRAESTRUCTURA B2B', W2, curY);
+      curY += 16;
+    }
 
     ctx.fillStyle    = '#FFFFFF';
     ctx.font         = `800 13.5px 'Poppins', sans-serif`;
@@ -1059,9 +1250,21 @@ function renderHUD() {
     ctx.fillText(scr.sub, W2, curY);
     curY += 17;
 
-    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillStyle = isFlag ? '#38BDF8' : `rgb(${r},${g},${b})`;
     ctx.font      = `700 9.5px 'Poppins', sans-serif`;
-    ctx.fillText(`[ CLICK ]  ${scr.cta || 'explorar este espacio'}`, W2, curY);
+    ctx.fillText(`⚡ [ CLICK ]  ${scr.cta || 'explorar este espacio'}`, W2, curY);
+  }
+
+  // Desvanecer el aviso inferior si la tarjeta flotante está activa para evitar colisiones
+  const lockHint = document.getElementById('lock-hint');
+  if (lockHint) {
+    if (onScreen) {
+      lockHint.style.opacity = '0';
+      lockHint.style.pointerEvents = 'none';
+    } else if (!isPointerLocked) {
+      lockHint.style.opacity = '1';
+      lockHint.style.pointerEvents = 'auto';
+    }
   }
 
   // ── 3. Horizonte luminoso ──────────────────────────
@@ -1200,10 +1403,11 @@ function update(dt) {
 // ══════════════════════════════════════════════════════
 
 const CSS3D_SCREENS = [
-  { edgeIdx: 0, domId: 'css3d-screen-creativas',  screenId: 'milkit-creativas' },
-  { edgeIdx: 3, domId: 'css3d-screen-seo',        screenId: 'milkit-seo' },
-  { edgeIdx: 5, domId: 'css3d-screen-multimedia', screenId: 'milkit-multimedia' },
-  { edgeIdx: 8, domId: 'css3d-screen-digital',    screenId: 'milkit-digital' },
+  { edgeIdx: 0,  domId: 'css3d-screen-markos',     screenId: 'markos' },
+  { edgeIdx: 3,  domId: 'css3d-screen-creativas',  screenId: 'milkit-creativas' },
+  { edgeIdx: 5,  domId: 'css3d-screen-seo',        screenId: 'milkit-seo' },
+  { edgeIdx: 8,  domId: 'css3d-screen-multimedia', screenId: 'milkit-multimedia' },
+  { edgeIdx: 10, domId: 'css3d-screen-advisors',   screenId: 'milkit-advisors' },
 ];
 
 let css3dViewportEl = null;
@@ -1369,6 +1573,14 @@ function onScreenSelect(screen) {
   }, 400);
 }
 
+function switchModalTab(tabId) {
+  const tabs = document.querySelectorAll('.modal-tab-btn');
+  const panes = document.querySelectorAll('.modal-tab-pane');
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+  panes.forEach(p => p.classList.toggle('active', p.id === tabId));
+}
+window.switchModalTab = switchModalTab;
+
 function openProductEnvironment(productId) {
   isProductViewOpen = true;
   if (document.pointerLockElement) document.exitPointerLock();
@@ -1377,26 +1589,35 @@ function openProductEnvironment(productId) {
   if (modal) {
     modal.classList.add('active');
     modal.scrollTop = 0;
-    animateTelemetry();
 
-    // Enfocar suavemente la tarjeta del servicio seleccionado si corresponde
-    if (productId) {
-      const cardMap = {
-        'milkit-creativas':  'service-card-creativas',
-        'milkit-seo':        'service-card-seo',
-        'milkit-multimedia': 'service-card-multimedia',
-        'milkit-digital':    'service-card-digital',
-      };
-      const targetId = cardMap[productId];
-      if (targetId) {
-        setTimeout(() => {
-          const el = document.getElementById(targetId);
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            el.style.transform = 'scale(1.02)';
-            setTimeout(() => { el.style.transform = ''; }, 700);
-          }
-        }, 220);
+    if (productId === 'markos') {
+      switchModalTab('tab-markos');
+      animateTelemetry();
+    } else if (productId === 'milkit-advisors') {
+      switchModalTab('tab-advisors');
+    } else {
+      switchModalTab('tab-creativas');
+      animateTelemetry();
+
+      // Enfocar suavemente la tarjeta del servicio seleccionado si corresponde
+      if (productId) {
+        const cardMap = {
+          'milkit-creativas':  'service-card-creativas',
+          'milkit-seo':        'service-card-seo',
+          'milkit-multimedia': 'service-card-multimedia',
+          'milkit-digital':    'service-card-digital',
+        };
+        const targetId = cardMap[productId];
+        if (targetId) {
+          setTimeout(() => {
+            const el = document.getElementById(targetId);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              el.style.transform = 'scale(1.02)';
+              setTimeout(() => { el.style.transform = ''; }, 700);
+            }
+          }, 220);
+        }
       }
     }
   }

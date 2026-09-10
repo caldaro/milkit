@@ -189,34 +189,51 @@
       transform: translateX(-50%) translateY(4px);
     }
 
-    /* ─── Botón Flotante de Paleta ────────────────── */
-    #palette-btn {
+    /* ─── Botones de Acción Superiores (HUD Top Bar) ──── */
+    #hud-top-actions {
       position: fixed;
       top: 20px;
       right: 20px;
       z-index: 120;
-      background: rgba(6, 12, 24, 0.85);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    #palette-btn, #advisors-btn {
+      background: rgba(6, 12, 24, 0.88);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1.5px solid rgba(58, 181, 247, 0.5);
-      color: #38BDF8;
       font-family: var(--font);
       font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.08em;
-      padding: 8px 16px;
+      padding: 8px 18px;
       border-radius: 20px;
       cursor: pointer;
       pointer-events: auto;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, color 0.2s;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
       user-select: none;
+    }
+    #palette-btn {
+      border: 1.5px solid rgba(58, 181, 247, 0.5);
+      color: #38BDF8;
     }
     #palette-btn:hover {
       border-color: #FA61A2;
       color: #FA61A2;
       transform: scale(1.05);
-      box-shadow: 0 6px 24px rgba(250, 97, 162, 0.4);
+      box-shadow: 0 6px 24px rgba(250, 97, 162, 0.45);
+    }
+    #advisors-btn {
+      border: 1.5px solid rgba(242, 201, 76, 0.6);
+      color: #F2C94C;
+    }
+    #advisors-btn:hover {
+      border-color: #38BDF8;
+      color: #38BDF8;
+      transform: scale(1.05);
+      box-shadow: 0 6px 24px rgba(58, 181, 247, 0.45);
     }
 
     /* ─── Transition Overlay ──────────────────────── */
@@ -500,6 +517,182 @@
       color: #FFFFFF;
     }
 
+    /* ─── Modal Navigation Tabs ───────────────────── */
+    .modal-tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 16px;
+    }
+    .modal-tab-btn {
+      background: rgba(14, 24, 46, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      color: #94A3B8;
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 10px 22px;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+    .modal-tab-btn:hover {
+      color: #FFFFFF;
+      border-color: rgba(58, 181, 247, 0.5);
+      background: rgba(58, 181, 247, 0.12);
+    }
+    .modal-tab-btn.active {
+      background: linear-gradient(90deg, rgba(58, 181, 247, 0.25), rgba(250, 97, 162, 0.25));
+      border-color: #3AB5F7;
+      color: #FFFFFF;
+      box-shadow: 0 0 20px rgba(58, 181, 247, 0.35);
+    }
+    .modal-tab-pane {
+      display: none;
+      flex-direction: column;
+      gap: 32px;
+      width: 100%;
+    }
+    .modal-tab-pane.active {
+      display: flex;
+    }
+
+    /* ─── Advisory Board Grid & Cards ─────────────── */
+    .advisors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 22px;
+      width: 100%;
+    }
+    .advisor-card {
+      background: rgba(10, 18, 34, 0.80);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+    .advisor-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
+    }
+    .advisor-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3.5px;
+      background: var(--card-color, #3AB5F7);
+    }
+    .advisor-top-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .advisor-avatar-box {
+      position: relative;
+      width: 70px;
+      height: 70px;
+      flex-shrink: 0;
+    }
+    .advisor-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--card-color, #3AB5F7);
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+    }
+    .advisor-badge-dot {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--card-color, #3AB5F7);
+      border: 2px solid #080E1C;
+    }
+    .advisor-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .advisor-badge-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      align-self: flex-start;
+      border: 1px solid var(--card-color, #3AB5F7);
+      color: var(--card-color, #3AB5F7);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .advisor-name-text {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin: 2px 0 0;
+      line-height: 1.2;
+    }
+    .advisor-role-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #94A3B8;
+    }
+    .advisor-bio-text {
+      font-size: 0.88rem;
+      color: #CBD5E1;
+      line-height: 1.55;
+      flex-grow: 1;
+    }
+    .advisor-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 14px;
+      margin-top: 4px;
+    }
+    .advisor-loc-tag {
+      font-size: 0.75rem;
+      color: #64748B;
+      font-weight: 600;
+    }
+    .advisor-li-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(58, 181, 247, 0.12);
+      border: 1px solid rgba(58, 181, 247, 0.4);
+      color: #38BDF8;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .advisor-li-link:hover {
+      background: #0A66C2;
+      color: #FFFFFF;
+      border-color: #0A66C2;
+      box-shadow: 0 4px 14px rgba(10, 102, 194, 0.5);
+    }
+
     /* ─── Mobile Touch Controls ──────────────────── */
     #mobile-controls {
       position: fixed;
@@ -608,7 +801,91 @@
       border-color: #38BDF8 !important;
     }
     
-    /* ─── Pantalla 0: Soluciones Creativas (Cyan Flagship) ─── */
+    /* ─── Pantalla 0: MarkOS Producto Estrella (Obsidian Tech Flagship) ─── */
+    .kiosk-screen-3d.flagship {
+      background: radial-gradient(circle at 50% 0%, rgba(10, 22, 48, 0.98), rgba(4, 7, 16, 0.99) 75%);
+      border: 2px solid rgba(58, 181, 247, 0.85);
+      box-shadow: 0 0 45px rgba(58, 181, 247, 0.45), inset 0 0 30px rgba(58, 181, 247, 0.15);
+      color: #fff;
+    }
+    .kiosk-screen-3d.flagship .kiosk-badge {
+      align-self: center;
+      padding: 6px 18px;
+      background: rgba(242, 201, 76, 0.18);
+      border: 1.5px solid #F2C94C;
+      color: #F2C94C;
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 20px;
+      letter-spacing: 0.12em;
+    }
+    .kiosk-screen-3d.flagship .kiosk-brand {
+      text-align: center;
+      color: #38BDF8;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+    .kiosk-screen-3d.flagship .kiosk-title {
+      text-align: center;
+      font-size: 42px;
+      font-weight: 900;
+      margin: 2px 0 0;
+      letter-spacing: -0.02em;
+      background: linear-gradient(180deg, #FFFFFF 30%, #BAE6FD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .kiosk-screen-3d.flagship .kiosk-sub {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94A3B8;
+      margin-bottom: 10px;
+    }
+    .kiosk-screen-3d.flagship .k-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(58, 181, 247, 0.35);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #E2E8F0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .kiosk-screen-3d.flagship .k-chip span {
+      color: #38BDF8;
+      font-size: 14px;
+    }
+    .kiosk-screen-3d.flagship .kiosk-btn {
+      background: linear-gradient(90deg, #3AB5F7, #FA61A2);
+      border: none;
+      color: #fff;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 800;
+      padding: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(58, 181, 247, 0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kiosk-screen-3d.flagship .kiosk-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 26px rgba(58, 181, 247, 0.65);
+    }
+    .kiosk-screen-3d.flagship .kiosk-footer {
+      text-align: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── Pantalla 1: Soluciones Creativas (Cyan) ─── */
     .kiosk-screen-3d.creative {
       background: radial-gradient(circle at 50% 0%, rgba(14, 28, 54, 0.98), rgba(6, 10, 18, 0.98) 75%);
       border: 2.5px solid rgba(58, 181, 247, 0.85);
@@ -935,6 +1212,116 @@
       letter-spacing: 0.08em;
     }
 
+    /* ─── Pantalla 4: Consejo Asesor Senior (Gold / Amber) ─── */
+    .kiosk-screen-3d.advisors {
+      background: radial-gradient(circle at 50% 0%, rgba(32, 24, 10, 0.98), rgba(8, 8, 16, 0.99) 75%);
+      border: 2px solid rgba(242, 201, 76, 0.85);
+      box-shadow: 0 0 35px rgba(242, 201, 76, 0.35), inset 0 0 25px rgba(242, 201, 76, 0.12);
+      color: #fff;
+    }
+    .kiosk-screen-3d.advisors .kiosk-badge {
+      background: rgba(242, 201, 76, 0.18);
+      border: 1.5px solid #F2C94C;
+      color: #F2C94C;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      padding: 6px 14px;
+      border-radius: 20px;
+      align-self: center;
+    }
+    .kiosk-screen-3d.advisors .kiosk-brand {
+      text-align: center;
+      color: #F2C94C;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+    }
+    .kiosk-screen-3d.advisors .kiosk-title {
+      color: #FFFFFF;
+      font-size: 32px;
+      font-weight: 900;
+      text-align: center;
+      margin: 2px 0 0;
+    }
+    .kiosk-screen-3d.advisors .kiosk-sub {
+      color: #94A3B8;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .advisors-preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 2px 0;
+    }
+    .adv-mini {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(242, 201, 76, 0.25);
+      border-radius: 10px;
+      padding: 5px 8px;
+    }
+    .adv-mini img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid #F2C94C;
+      flex-shrink: 0;
+    }
+    .adv-mini-info {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .adv-mini-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.2;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .adv-mini-role {
+      font-size: 9px;
+      font-weight: 600;
+      color: #F2C94C;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .kiosk-screen-3d.advisors .kiosk-btn {
+      background: linear-gradient(90deg, #F2C94C, #FA61A2);
+      border: none;
+      color: #000000;
+      font-family: var(--font);
+      font-size: 14.5px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      padding: 13px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kiosk-screen-3d.advisors .kiosk-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 26px rgba(242, 201, 76, 0.65);
+    }
+    .kiosk-screen-3d.advisors .kiosk-footer {
+      text-align: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.08em;
+    }
+
     /* Vaquita 3D Billboard */
     .vaquita-3d-billboard {
       position: absolute;
@@ -966,9 +1353,25 @@
   <!-- ═══ CSS 3D PROJECTION LAYER ════════════════ -->
   <div id="css3d-viewport">
     <div id="css3d-world">
-      <!-- Screen 0: Milkit Creativas (Flagship / Principal) -->
+      <!-- Screen 0: MarkOS (Flagship B2B Growth OS) -->
+      <div id="css3d-screen-markos" class="kiosk-screen-3d flagship">
+        <div class="kiosk-badge">★ PRODUCTO ESTRELLA</div>
+        <div class="kiosk-brand">MILKIT LABS · INFRAESTRUCTURA B2B</div>
+        <h2 class="kiosk-title">MarkOS</h2>
+        <div class="kiosk-sub">Sistema Operativo de Crecimiento Comercial</div>
+        <div class="kiosk-chips">
+          <div class="k-chip"><span>⚡</span> Omni-Channel Content Engine</div>
+          <div class="k-chip"><span>◉</span> Search Dominance &amp; ADS</div>
+          <div class="k-chip"><span>◎</span> CRM &amp; Lead Orchestration</div>
+          <div class="k-chip"><span>◈</span> Data &amp; Telemetry Core</div>
+        </div>
+        <button class="kiosk-btn" onclick="openProductEnvironment('markos')">⚡ DESPLEGAR MARKOS →</button>
+        <div class="kiosk-footer">▪ PIPELINES: 14 ▲ · CAC: -42% ▼ · UPTIME: 99.9%</div>
+      </div>
+
+      <!-- Screen 1: Milkit Creativas -->
       <div id="css3d-screen-creativas" class="kiosk-screen-3d creative">
-        <div class="kiosk-badge">★ ESTUDIO CREATIVO · PRINCIPAL</div>
+        <div class="kiosk-badge">ESTUDIO CREATIVO</div>
         <div class="kiosk-brand">MILKIT MULTIMEDIA</div>
         <h2 class="kiosk-title">Soluciones Creativas</h2>
         <div class="kiosk-sub">Estrategia · Branding · Contenido · Campañas 360°</div>
@@ -982,7 +1385,7 @@
         <div class="kiosk-footer">DISPONIBILIDAD INMEDIATA · CALIDAD EMISIÓN</div>
       </div>
 
-      <!-- Screen 1: SEO / ADS -->
+      <!-- Screen 2: SEO / ADS -->
       <div id="css3d-screen-seo" class="kiosk-screen-3d seo">
         <div class="kiosk-badge">GROWTH &amp; PERFORMANCE</div>
         <div class="kiosk-brand">MILKIT ADS</div>
@@ -998,7 +1401,7 @@
         <div class="kiosk-footer">CRECIMIENTO ESCALABLE · RETORNO MEDIBLE</div>
       </div>
 
-      <!-- Screen 2: Multimedia / 3D -->
+      <!-- Screen 3: Multimedia / 3D -->
       <div id="css3d-screen-multimedia" class="kiosk-screen-3d multimedia">
         <div class="kiosk-badge">PRODUCCIÓN AUDIOVISUAL</div>
         <div class="kiosk-brand">MILKIT STUDIO</div>
@@ -1014,20 +1417,44 @@
         <div class="kiosk-footer">ESTÁNDAR CINEMATOGRÁFICO · MOTION 60FPS</div>
       </div>
 
-      <!-- Screen 3: Streaming / Apps / UX -->
-      <div id="css3d-screen-digital" class="kiosk-screen-3d digital">
-        <div class="kiosk-badge">TECH &amp; DIGITAL</div>
-        <div class="kiosk-brand">MILKIT LABS</div>
-        <h2 class="kiosk-title">Streaming · Apps · UX/UI</h2>
-        <div class="kiosk-sub">Front-End · React · Live Streaming · Experiencias Digitales</div>
-        <div class="kiosk-chips">
-          <div class="k-chip"><span>●</span> Desarrollo Web Front-End Ultra-Ligero</div>
-          <div class="k-chip"><span>●</span> Transmisiones Live Streaming Multiplataforma</div>
-          <div class="k-chip"><span>●</span> Diseño UX/UI Centrado en Conversión</div>
-          <div class="k-chip"><span>●</span> Arquitecturas Interactivas 2.5D / WebGL</div>
+      <!-- Screen 4: Consejo Asesor Senior -->
+      <div id="css3d-screen-advisors" class="kiosk-screen-3d advisors">
+        <div class="kiosk-badge">CONSEJO CONSULTIVO SENIOR</div>
+        <div class="kiosk-brand">MILKIT ADVISORY BOARD</div>
+        <h2 class="kiosk-title">Consejo Asesor</h2>
+        <div class="kiosk-sub">Arquitectura · Estrategia · Arte · Cinematografía</div>
+        <div class="advisors-preview-grid">
+          <div class="adv-mini">
+            <img src="assets/advisors/angel-verdu.jpg" alt="Ángel Verdú">
+            <div class="adv-mini-info">
+              <span class="adv-mini-name">Ángel Verdú</span>
+              <span class="adv-mini-role">Sistemas</span>
+            </div>
+          </div>
+          <div class="adv-mini">
+            <img src="assets/advisors/maria-alejandra-vasquez.jpg" alt="M. Alejandra Vásquez">
+            <div class="adv-mini-info">
+              <span class="adv-mini-name">M. Alejandra</span>
+              <span class="adv-mini-role">Proyectos</span>
+            </div>
+          </div>
+          <div class="adv-mini">
+            <img src="assets/advisors/leafar-alvarez.jpg" alt="Leafar Álvarez">
+            <div class="adv-mini-info">
+              <span class="adv-mini-name">Leafar Álvarez</span>
+              <span class="adv-mini-role">Arte</span>
+            </div>
+          </div>
+          <div class="adv-mini">
+            <img src="assets/advisors/eduardo-garcia.jpg" alt="Eduardo García">
+            <div class="adv-mini-info">
+              <span class="adv-mini-name">Eduardo García</span>
+              <span class="adv-mini-role">Cine</span>
+            </div>
+          </div>
         </div>
-        <button class="kiosk-btn" onclick="openProductEnvironment('milkit-digital')">CONOCER LABS →</button>
-        <div class="kiosk-footer">ALTO RENDIMIENTO · EXPERIENCIA MODERNA</div>
+        <button class="kiosk-btn" onclick="openProductEnvironment('milkit-advisors')">👥 CONOCER ASESORES →</button>
+        <div class="kiosk-footer">LIDERAZGO EXPERTO · AUDITORÍA CONTINUA</div>
       </div>
 
       <!-- Vaquita 3D Billboard -->
@@ -1047,7 +1474,10 @@
   </div>
 
   <!-- ═══ UI ELEMENTS ═══════════════════════════ -->
-  <div id="palette-btn" onclick="cyclePalette()" title="Cambiar Paleta de Color">🎨 Paleta [P]</div>
+  <div id="hud-top-actions">
+    <div id="palette-btn" onclick="cyclePalette()" title="Cambiar Paleta de Color">🎨 Paleta [P]</div>
+    <div id="advisors-btn" onclick="openProductEnvironment('milkit-advisors')" title="Ver Consejo Asesor">👥 Consejo Asesor</div>
+  </div>
   <div id="lock-hint">Click para capturar el mouse</div>
   <div id="notification"></div>
   <div id="transition-overlay"></div>
@@ -1067,117 +1497,361 @@
       
       <div class="modal-header">
         <div class="modal-title-wrap">
-          <span class="badge-b2b" style="background:rgba(58,181,247,0.15); border-color:#3AB5F7; color:#3AB5F7;">Milkit · Soluciones Creativas</span>
-          <span style="color:#FA61A2; font-size:0.75rem; letter-spacing:0.15em; font-weight:700;">● PORTAFOLIO LIVE</span>
+          <span class="badge-b2b" id="modal-top-badge">Milkit Multimedia</span>
+          <span id="modal-top-status" style="color:#FA61A2; font-size:0.75rem; letter-spacing:0.15em; font-weight:700;">● SHOWROOM &amp; LABS</span>
         </div>
         <button id="close-modal-btn" class="modal-close-btn">[ ✕ VOLVER AL SALÓN ]</button>
       </div>
 
-      <div class="hero-pitch">
-        <h1>Tu marca no necesita más likes.<br><span style="color:#3AB5F7;">Necesita resultados.</span></h1>
-        <p class="lead">
-          Somos Milkit Multimedia: una agencia de soluciones creativas que combina estrategia de marca, producción audiovisual y tecnología digital para convertir tu presencia en un activo comercial real.
-          <strong style="color:#FA61A2;">Diseñamos experiencias que venden.</strong>
-        </p>
+      <!-- Modal Navigation Tabs -->
+      <div class="modal-tabs">
+        <button class="modal-tab-btn active" data-tab="tab-creativas" onclick="switchModalTab('tab-creativas')">✦ Soluciones Creativas</button>
+        <button class="modal-tab-btn" data-tab="tab-markos" onclick="switchModalTab('tab-markos')">⚡ MarkOS Flagship B2B</button>
+        <button class="modal-tab-btn" data-tab="tab-advisors" onclick="switchModalTab('tab-advisors')">👥 Consejo Asesor Senior</button>
       </div>
 
-      <!-- Telemetry Strip -->
-      <div class="telemetry-strip">
-        <div class="tele-stat">
-          <div class="tele-val" id="stat-pipelines" style="color:#3AB5F7;">14</div>
-          <div class="tele-lbl">Proyectos Activos</div>
-        </div>
-        <div class="tele-stat">
-          <div class="tele-val" id="stat-speed" style="color:#FA61A2;">48h</div>
-          <div class="tele-lbl">Entrega Express</div>
-        </div>
-        <div class="tele-stat">
-          <div class="tele-val" id="stat-cac" style="color:#9059C8;">+320%</div>
-          <div class="tele-lbl">Alcance Orgánico</div>
-        </div>
-        <div class="tele-stat">
-          <div class="tele-val" id="stat-health" style="color:#F2C94C;">100%</div>
-          <div class="tele-lbl">Clientes Satisfechos</div>
-        </div>
-      </div>
-
-      <!-- 4 Core Services -->
-      <div class="grid-engines">
-        
-        <div class="engine-card" id="service-card-creativas" style="border-color:rgba(58,181,247,0.4);">
-          <div class="engine-sub">Servicio 01 · Branding</div>
-          <h3 style="color:#3AB5F7;">⚙ Estrategia &amp; Branding</h3>
-          <ul>
-            <li><strong>Identidad Visual:</strong> Logotipo, paleta, tipografía y manual de marca que comunica quién eres antes de decir una palabra.</li>
-            <li><strong>Posicionamiento:</strong> Definimos tu nicho, tu voz y tu diferenciador competitivo con datos reales del mercado.</li>
-            <li><strong>Campañas 360°:</strong> De la idea al lanzamiento coordinado en todos los canales relevantes para tu audiencia.</li>
-          </ul>
+      <!-- ── PANE 1: SOLUCIONES CREATIVAS MILKIT ── -->
+      <div id="tab-creativas" class="modal-tab-pane active">
+        <div class="hero-pitch">
+          <h1>Tu marca no necesita más likes.<br><span style="color:#3AB5F7;">Necesita resultados.</span></h1>
+          <p class="lead">
+            Somos Milkit Multimedia: una agencia de soluciones creativas que combina estrategia de marca, producción audiovisual y tecnología digital para convertir tu presencia en un activo comercial real.
+            <strong style="color:#FA61A2;">Diseñamos experiencias que venden.</strong>
+          </p>
         </div>
 
-        <div class="engine-card" id="service-card-seo" style="border-color:rgba(250,97,162,0.4);">
-          <div class="engine-sub">Servicio 02 · Performance</div>
-          <h3 style="color:#FA61A2;">◉ SEO · Emailing · ADS</h3>
-          <ul>
-            <li><strong>Google &amp; Meta ADS:</strong> Campañas de pago optimizadas para conversión real, no solo clics.</li>
-            <li><strong>Email Marketing:</strong> Flows automatizados de nutrición que convierten suscriptores en clientes.</li>
-            <li><strong>Posicionamiento Orgánico:</strong> SEO técnico y de contenido para dominar los resultados que importan.</li>
-          </ul>
-        </div>
-
-        <div class="engine-card" id="service-card-multimedia" style="border-color:rgba(144,89,200,0.4);">
-          <div class="engine-sub">Servicio 03 · Audiovisual</div>
-          <h3 style="color:#9059C8;">◎ Diseño &amp; Motion</h3>
-          <ul>
-            <li><strong>Producción Audiovisual:</strong> Video corporativo, reels, spots y documentales con calidad de emisión.</li>
-            <li><strong>Motion Graphics:</strong> Animaciones e infografías que comunican ideas complejas en segundos.</li>
-            <li><strong>Fotografía de Producto:</strong> Imagen profesional que aumenta la tasa de conversión en e-commerce.</li>
-          </ul>
-        </div>
-
-        <div class="engine-card" id="service-card-digital" style="border-color:rgba(242,201,76,0.4);">
-          <div class="engine-sub">Servicio 04 · Tecnología</div>
-          <h3 style="color:#F2C94C;">◈ Streaming · Apps · UX/UI</h3>
-          <ul>
-            <li><strong>Desarrollo Front-End:</strong> Interfaces React modernas, rápidas y optimizadas para conversión.</li>
-            <li><strong>Live Streaming:</strong> Producción y distribución de transmisiones en vivo para eventos y lanzamientos.</li>
-            <li><strong>UX/UI Design:</strong> Diseño de experiencias digitales centradas en el usuario que guían hacia la acción.</li>
-          </ul>
-        </div>
-
-      </div>
-
-      <!-- Comparison Section -->
-      <div class="comparison-section">
-        <h2>Del contenido al resultado: La diferencia Milkit</h2>
-        <div class="comparison-grid">
-          <div class="comp-col bad">
-            <h4>Agencia Genérica / Freelancer Aislado</h4>
-            <ul>
-              <li>Entregables inconsistentes sin visión de marca unificada</li>
-              <li>Falta de coordinación entre diseño, contenido y pauta</li>
-              <li>Métricas de vanidad sin correlación con ventas reales</li>
-              <li>Dependencia de un solo recurso con alta rotación</li>
-            </ul>
+        <!-- Telemetry Strip -->
+        <div class="telemetry-strip">
+          <div class="tele-stat">
+            <div class="tele-val" style="color:#3AB5F7;">14</div>
+            <div class="tele-lbl">Proyectos Activos</div>
           </div>
-          <div class="comp-col good">
-            <h4>Milkit · Equipo Multimedia Integrado</h4>
-            <ul>
-              <li>Estrategia + diseño + producción + distribución bajo un solo techo</li>
-              <li>Identidad coherente en todos los puntos de contacto</li>
-              <li>Reportes de impacto comercial medible y trazable</li>
-              <li>Escalabilidad: desde startups hasta operaciones regionales</li>
-            </ul>
+          <div class="tele-stat">
+            <div class="tele-val" style="color:#FA61A2;">48h</div>
+            <div class="tele-lbl">Entrega Express</div>
+          </div>
+          <div class="tele-stat">
+            <div class="tele-val" style="color:#9059C8;">+320%</div>
+            <div class="tele-lbl">Alcance Orgánico</div>
+          </div>
+          <div class="tele-stat">
+            <div class="tele-val" style="color:#F2C94C;">100%</div>
+            <div class="tele-lbl">Clientes Satisfechos</div>
           </div>
         </div>
+
+        <!-- 4 Core Services -->
+        <div class="grid-engines">
+          
+          <div class="engine-card" id="service-card-creativas" style="border-color:rgba(58,181,247,0.4);">
+            <div class="engine-sub">Servicio 01 · Branding</div>
+            <h3 style="color:#3AB5F7;">⚙ Estrategia &amp; Branding</h3>
+            <ul>
+              <li><strong>Identidad Visual:</strong> Logotipo, paleta, tipografía y manual de marca que comunica quién eres antes de decir una palabra.</li>
+              <li><strong>Posicionamiento:</strong> Definimos tu nicho, tu voz y tu diferenciador competitivo con datos reales del mercado.</li>
+              <li><strong>Campañas 360°:</strong> De la idea al lanzamiento coordinado en todos los canales relevantes para tu audiencia.</li>
+            </ul>
+          </div>
+
+          <div class="engine-card" id="service-card-seo" style="border-color:rgba(250,97,162,0.4);">
+            <div class="engine-sub">Servicio 02 · Performance</div>
+            <h3 style="color:#FA61A2;">◉ SEO · Emailing · ADS</h3>
+            <ul>
+              <li><strong>Google &amp; Meta ADS:</strong> Campañas de pago optimizadas para conversión real, no solo clics.</li>
+              <li><strong>Email Marketing:</strong> Flows automatizados de nutrición que convierten suscriptores en clientes.</li>
+              <li><strong>Posicionamiento Orgánico:</strong> SEO técnico y de contenido para dominar los resultados que importan.</li>
+            </ul>
+          </div>
+
+          <div class="engine-card" id="service-card-multimedia" style="border-color:rgba(144,89,200,0.4);">
+            <div class="engine-sub">Servicio 03 · Audiovisual</div>
+            <h3 style="color:#9059C8;">◎ Diseño &amp; Motion</h3>
+            <ul>
+              <li><strong>Producción Audiovisual:</strong> Video corporativo, reels, spots y documentales con calidad de emisión.</li>
+              <li><strong>Motion Graphics:</strong> Animaciones e infografías que comunican ideas complejas en segundos.</li>
+              <li><strong>Fotografía de Producto:</strong> Imagen profesional que aumenta la tasa de conversión en e-commerce.</li>
+            </ul>
+          </div>
+
+          <div class="engine-card" id="service-card-digital" style="border-color:rgba(242,201,76,0.4);">
+            <div class="engine-sub">Servicio 04 · Tecnología</div>
+            <h3 style="color:#F2C94C;">◈ Streaming · Apps · UX/UI</h3>
+            <ul>
+              <li><strong>Desarrollo Front-End:</strong> Interfaces React modernas, rápidas y optimizadas para conversión.</li>
+              <li><strong>Live Streaming:</strong> Producción y distribución de transmisiones en vivo para eventos y lanzamientos.</li>
+              <li><strong>UX/UI Design:</strong> Diseño de experiencias digitales centradas en el usuario que guían hacia la acción.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Comparison Section -->
+        <div class="comparison-section">
+          <h2>Del contenido al resultado: La diferencia Milkit</h2>
+          <div class="comparison-grid">
+            <div class="comp-col bad">
+              <h4>Agencia Genérica / Freelancer Aislado</h4>
+              <ul>
+                <li>Entregables inconsistentes sin visión de marca unificada</li>
+                <li>Falta de coordinación entre diseño, contenido y pauta</li>
+                <li>Métricas de vanidad sin correlación con ventas reales</li>
+                <li>Dependencia de un solo recurso con alta rotación</li>
+              </ul>
+            </div>
+            <div class="comp-col good">
+              <h4>Milkit · Equipo Multimedia Integrado</h4>
+              <ul>
+                <li>Estrategia + diseño + producción + distribución bajo un solo techo</li>
+                <li>Identidad coherente en todos los puntos de contacto</li>
+                <li>Reportes de impacto comercial medible y trazable</li>
+                <li>Escalabilidad: desde startups hasta operaciones regionales</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Banner -->
+        <div class="cta-banner" style="border-color:rgba(58,181,247,0.3); background:rgba(58,181,247,0.06);">
+          <h2>Hablemos de tu proyecto</h2>
+          <p>Cuéntanos qué necesitas. En 24 horas tienes una propuesta concreta, sin relleno y sin letra pequeña.</p>
+          <div class="cta-buttons">
+            <button id="cta-demo-btn" class="btn-primary-cta" style="background:#3AB5F7; color:#01030a; font-weight:800;">Solicitar Propuesta</button>
+            <button class="btn-secondary-cta" onclick="closeProductEnvironment()">Volver al Salón 2.5D</button>
+          </div>
+        </div>
       </div>
 
-      <!-- CTA Banner -->
-      <div class="cta-banner" style="border-color:rgba(58,181,247,0.3); background:rgba(58,181,247,0.06);">
-        <h2>Hablemos de tu proyecto</h2>
-        <p>Cuéntanos qué necesitas. En 24 horas tienes una propuesta concreta, sin relleno y sin letra pequeña.</p>
-        <div class="cta-buttons">
-          <button id="cta-demo-btn" class="btn-primary-cta" style="background:#3AB5F7; color:#01030a; font-weight:800;">Solicitar Propuesta</button>
-          <button id="back-to-room-btn" class="btn-secondary-cta">Volver al Salón 2.5D</button>
+      <!-- ── PANE 2: MARKOS PRODUCTO ESTRELLA B2B ── -->
+      <div id="tab-markos" class="modal-tab-pane">
+        <div class="hero-pitch">
+          <h1>No contrates una agencia.<br><span style="color:#3AB5F7;">Instala una infraestructura.</span></h1>
+          <p class="lead">
+            <strong>MarkOS</strong> es el primer sistema operativo comercial autónomo para empresas B2B. Centraliza en una sola arquitectura omnicanal la prospección masiva, SEO dominante, secuencias de venta y telemetría financiera milimétrica.
+            <strong style="color:#FA61A2;">Diseñado para escalar sin aumentar nómina.</strong>
+          </p>
+        </div>
+
+        <!-- Telemetry Strip -->
+        <div class="telemetry-strip">
+          <div class="tele-stat">
+            <div class="tele-val" id="stat-pipelines" style="color:#3AB5F7;">14</div>
+            <div class="tele-lbl">Pipelines Activos</div>
+          </div>
+          <div class="tele-stat">
+            <div class="tele-val" id="stat-speed" style="color:#FA61A2;">72h</div>
+            <div class="tele-lbl">Despliegue Core</div>
+          </div>
+          <div class="tele-stat">
+            <div class="tele-val" id="stat-cac" style="color:#9059C8;">-42%</div>
+            <div class="tele-lbl">Reducción CAC</div>
+          </div>
+          <div class="tele-stat">
+            <div class="tele-val" id="stat-health" style="color:#F2C94C;">99.9%</div>
+            <div class="tele-lbl">Uptime B2B</div>
+          </div>
+        </div>
+
+        <!-- 4 B2B Engines -->
+        <div class="grid-engines">
+          <div class="engine-card" style="border-color:rgba(58,181,247,0.4);">
+            <div class="engine-sub">Módulo 01 · Generación</div>
+            <h3 style="color:#3AB5F7;">⚡ Omni-Channel Engine</h3>
+            <ul>
+              <li><strong>Distribución Programática:</strong> Difusión multi-formato coordinada en LinkedIn, YouTube, Meta y Web sin fricción manual.</li>
+              <li><strong>Frameworks de Respuesta Directa:</strong> Textos bajo modelos PAS y AIDA para forzar decisiones comerciales informadas.</li>
+              <li><strong>Dominio Visual:</strong> Piezas de alto impacto gráfico alineadas con la identidad de marca corporativa.</li>
+            </ul>
+          </div>
+
+          <div class="engine-card" style="border-color:rgba(250,97,162,0.4);">
+            <div class="engine-sub">Módulo 02 · Posicionamiento</div>
+            <h3 style="color:#FA61A2;">◉ Search Dominance &amp; ADS</h3>
+            <ul>
+              <li><strong>Intención Comercial Dinámica:</strong> Despliegue de landing pages indexadas y optimizadas para nichos de alta rentabilidad.</li>
+              <li><strong>Schema Markup Avanzado:</strong> Inyección de metadatos semánticos que posicionan tus soluciones ante tomadores de decisión.</li>
+              <li><strong>Auditoría Continua:</strong> Monitoreo de velocidad de carga, Core Web Vitals y conversion rate optimization (CRO).</li>
+            </ul>
+          </div>
+
+          <div class="engine-card" style="border-color:rgba(144,89,200,0.4);">
+            <div class="engine-sub">Módulo 03 · Conversión</div>
+            <h3 style="color:#9059C8;">◎ CRM &amp; Lead Orchestration</h3>
+            <ul>
+              <li><strong>Captura Unificada:</strong> Formularios, llamadas, WhatsApp y correos se consolidan en tiempo real en un pipeline central.</li>
+              <li><strong>Nutrición Inteligente:</strong> Secuencias lógicas automatizadas que calientan al prospecto antes de la primera llamada.</li>
+              <li><strong>Entrega Comercial:</strong> Tu equipo comercial solo recibe prospectos con presupuesto validado y necesidad activa.</li>
+            </ul>
+          </div>
+
+          <div class="engine-card" style="border-color:rgba(242,201,76,0.4);">
+            <div class="engine-sub">Módulo 04 · Verdad Financiera</div>
+            <h3 style="color:#F2C94C;">◈ Data &amp; Telemetry Core</h3>
+            <ul>
+              <li><strong>Atribución de Ciclo Completo:</strong> Rastreo transparente del retorno sobre la inversión de cada canal y campaña.</li>
+              <li><strong>Dashboards en Vivo:</strong> Telemetría en tiempo real de Costo de Adquisición (CAC) y valor de vida del cliente (LTV).</li>
+              <li><strong>Predecibilidad Matemática:</strong> Modelos cuantitativos de crecimiento que reemplazan la intuición por métricas duras.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Enterprise Comparison -->
+        <div class="comparison-section">
+          <h2>La Ventaja Competitiva: Por qué MarkOS supera el modelo tradicional</h2>
+          <div class="comparison-grid">
+            <div class="comp-col bad">
+              <h4>Modelo Tradicional / Herramientas Dispersas</h4>
+              <ul>
+                <li>Dependencia de 10+ suscripciones desconectadas sin sinergia</li>
+                <li>Métricas de vanidad sin correlación con cierres reales</li>
+                <li>Procesos manuales propensos a errores y alta rotación de personal</li>
+                <li>Dificultad para atribuir con exactitud el origen de las ventas</li>
+              </ul>
+            </div>
+            <div class="comp-col good">
+              <h4>MarkOS · Infraestructura Centralizada</h4>
+              <ul>
+                <li>Un solo cerebro de ingeniería comercial unificado bajo una sola interfaz</li>
+                <li>Propiedad total de tus datos, flujos y activos digitales</li>
+                <li>Embudos continuos con Costo de Adquisición (CAC) predecible</li>
+                <li>Escalabilidad inmediata para absorber mayor inversión publicitaria</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- MarkOS CTA -->
+        <div class="cta-banner" style="border-color:rgba(58,181,247,0.4); background:rgba(58,181,247,0.08);">
+          <h2>Despliega MarkOS en tu Empresa</h2>
+          <p>Pasa del marketing artesanal a una infraestructura industrial de crecimiento B2B predecible. Agenda una auditoría técnica sin compromiso.</p>
+          <div class="cta-buttons">
+            <button class="btn-primary-cta" style="background:#3AB5F7; color:#01030a; font-weight:800;" onclick="showToast('✓ Solicitud de Auditoría MarkOS registrada. Conectando...')">⚡ Solicitar Demo &amp; Auditoría Técnica</button>
+            <button class="btn-secondary-cta" onclick="closeProductEnvironment()">Volver al Salón 2.5D</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PANE 3: CONSEJO ASESOR SENIOR ── -->
+      <div id="tab-advisors" class="modal-tab-pane">
+        <div class="hero-pitch">
+          <h1>Consejo Asesor Senior<br><span style="color:#F2C94C;">Dirección, Auditoría &amp; Gobernanza</span></h1>
+          <p class="lead">
+            Un equipo consultivo de líderes senior de la industria que supervisan, auditan y elevan la excelencia de la arquitectura técnica, producción cinematográfica, dirección de arte y ejecución de proyectos de <strong>Milkit</strong> y <strong>MarkOS</strong>.
+          </p>
+        </div>
+
+        <!-- 4 Advisors Cards -->
+        <div class="advisors-grid">
+          
+          <!-- Asesor 1: Ángel Verdú Ortiz -->
+          <div class="advisor-card" style="--card-color:#3AB5F7;">
+            <div class="advisor-top-row">
+              <div class="advisor-avatar-box">
+                <img src="assets/advisors/angel-verdu.jpg" alt="Ángel Verdú Ortiz" class="advisor-avatar-img">
+                <span class="advisor-badge-dot"></span>
+              </div>
+              <div class="advisor-info">
+                <div class="advisor-badge-tag">SISTEMAS &amp; ARQUITECTURA</div>
+                <h3 class="advisor-name-text">Ángel Verdú Ortiz</h3>
+                <div class="advisor-role-text">Asesor de Arquitectura de Sistemas</div>
+              </div>
+            </div>
+            <p class="advisor-bio-text">
+              Senior Software Architect &amp; Electronic Engineer. Más de 21 años impulsando infraestructuras de streaming en tiempo real y sistemas distribuidos escalables en <strong>Epiphan Video</strong> y <strong>Nearby Computing</strong> (UNEXPO / IESE Business School).
+            </p>
+            <div class="advisor-actions">
+              <span class="advisor-loc-tag">📍 Buenos Aires · España</span>
+              <a href="https://www.linkedin.com/in/angelverdu/" target="_blank" rel="noopener noreferrer" class="advisor-li-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                Ver LinkedIn ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- Asesor 2: María Alejandra Vásquez Majano -->
+          <div class="advisor-card" style="--card-color:#FA61A2;">
+            <div class="advisor-top-row">
+              <div class="advisor-avatar-box">
+                <img src="assets/advisors/maria-alejandra-vasquez.jpg" alt="María Alejandra Vásquez" class="advisor-avatar-img">
+                <span class="advisor-badge-dot"></span>
+              </div>
+              <div class="advisor-info">
+                <div class="advisor-badge-tag">GESTIÓN &amp; ESTRATEGIA</div>
+                <h3 class="advisor-name-text">María Alejandra Vásquez</h3>
+                <div class="advisor-role-text">Asesora de Proyectos</div>
+              </div>
+            </div>
+            <p class="advisor-bio-text">
+              Project Management &amp; Strategic Operations Director. Especialista en planificación de proyectos industriales, gobernanza de procesos y aseguramiento de objetivos comerciales de gran escala en <strong>Organización El Tunal</strong> (Universidad Centroccidental Lisandro Alvarado - UCLA).
+            </p>
+            <div class="advisor-actions">
+              <span class="advisor-loc-tag">📍 Cabudare · Barquisimeto</span>
+              <a href="https://www.linkedin.com/in/maria-alejandra-vasquez-majano-937b0b91/" target="_blank" rel="noopener noreferrer" class="advisor-li-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                Ver LinkedIn ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- Asesor 3: Leafar Álvarez -->
+          <div class="advisor-card" style="--card-color:#C084FC;">
+            <div class="advisor-top-row">
+              <div class="advisor-avatar-box">
+                <img src="assets/advisors/leafar-alvarez.jpg" alt="Leafar Álvarez" class="advisor-avatar-img">
+                <span class="advisor-badge-dot"></span>
+              </div>
+              <div class="advisor-info">
+                <div class="advisor-badge-tag">DIRECCIÓN DE ARTE</div>
+                <h3 class="advisor-name-text">Leafar Álvarez</h3>
+                <div class="advisor-role-text">Asesor de Arte</div>
+              </div>
+            </div>
+            <p class="advisor-bio-text">
+              Senior Art Director, Diseñador y Fotógrafo independiente con más de 15 años definiendo universos visuales, branding de impacto, producción artística editorial y audiovisual transmedia (Centro Instituto de Diseño Gráfico - CIDIG).
+            </p>
+            <div class="advisor-actions">
+              <span class="advisor-loc-tag">📍 Bogotá · Barquisimeto</span>
+              <a href="https://www.linkedin.com/in/leafar-alvarez-73873b139/" target="_blank" rel="noopener noreferrer" class="advisor-li-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                Ver LinkedIn ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- Asesor 4: Eduardo García -->
+          <div class="advisor-card" style="--card-color:#F2C94C;">
+            <div class="advisor-top-row">
+              <div class="advisor-avatar-box">
+                <img src="assets/advisors/eduardo-garcia.jpg" alt="Eduardo García" class="advisor-avatar-img">
+                <span class="advisor-badge-dot"></span>
+              </div>
+              <div class="advisor-info">
+                <div class="advisor-badge-tag">CINE &amp; AUDIOVISUAL</div>
+                <h3 class="advisor-name-text">Eduardo García</h3>
+                <div class="advisor-role-text">Asesor Cinematográfico</div>
+              </div>
+            </div>
+            <p class="advisor-bio-text">
+              Realizador Audiovisual, Director de Fotografía y Editor Senior con más de 15 años de trayectoria en dirección cinematográfica, comerciales internacionales y postproducción de emisión en <strong>Autolider / Inchcape</strong> (Universidad de Los Andes - ULA).
+            </p>
+            <div class="advisor-actions">
+              <span class="advisor-loc-tag">📍 Brasil · Uruguay</span>
+              <a href="https://www.linkedin.com/in/eduardo-garc%C3%ADa-7253a237/" target="_blank" rel="noopener noreferrer" class="advisor-li-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                Ver LinkedIn ↗
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Advisors CTA Banner -->
+        <div class="cta-banner" style="border-color:rgba(242,201,76,0.35); background:rgba(242,201,76,0.06);">
+          <h2>Auditoría &amp; Consultoría de Nivel Senior</h2>
+          <p>Cada solución tecnológica y cada pieza de contenido que producimos en Milkit cuenta con la auditoría continua de nuestro consejo consultivo.</p>
+          <div class="cta-buttons">
+            <button class="btn-primary-cta" style="background:#F2C94C; color:#01030a; font-weight:800;" onclick="showToast('✓ Solicitud de Consultoría registrada. Conectando...')">Consultar con el Consejo Asesor</button>
+            <button class="btn-secondary-cta" onclick="closeProductEnvironment()">Volver al Salón 2.5D</button>
+          </div>
         </div>
       </div>
 
