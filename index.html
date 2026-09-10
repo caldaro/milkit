@@ -165,6 +165,132 @@
       user-select: none;
     }
 
+    /* ─── HUD Crosshair ───────────────────────────── */
+    #crosshair {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      pointer-events: none;
+      z-index: 140; /* Por encima de los paneles 3D (z-index 40) */
+      transition: width 0.15s ease, height 0.15s ease;
+    }
+    #crosshair::before,
+    #crosshair::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.55);
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+    }
+    #crosshair::before {
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1.5px;
+      transform: translateY(-50%);
+    }
+    #crosshair::after {
+      left: 50%;
+      top: 0;
+      height: 100%;
+      width: 1.5px;
+      transform: translateX(-50%);
+    }
+    #crosshair.on-screen {
+      width: 24px;
+      height: 24px;
+    }
+    #crosshair.on-screen::before,
+    #crosshair.on-screen::after {
+      background: #FA61A2;
+      box-shadow: 0 0 8px #FA61A2;
+    }
+
+    /* ─── HUD Floating Card (Tarjeta Flotante Interactiva) ─── */
+    #hud-floating-card {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      z-index: 150; /* SIEMPRE por encima de los paneles 3D (z-index 40) */
+      width: auto;
+      min-width: 320px;
+      max-width: min(560px, 88vw);
+      background: rgba(8, 14, 28, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 12px;
+      padding: 12px 24px 14px;
+      text-align: center;
+      border: 1.5px solid rgba(58, 181, 247, 0.85);
+      box-shadow: 0 10px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(58, 181, 247, 0.35);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      user-select: none;
+      cursor: pointer;
+    }
+    #hud-floating-card.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    #hud-floating-card:hover {
+      transform: translateX(-50%) translateY(-2px) scale(1.02);
+      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.85), 0 0 32px rgba(58, 181, 247, 0.5);
+    }
+    body.is-touch #hud-floating-card {
+      bottom: 105px; /* Por encima de controles touch móvil */
+    }
+    .hud-card-top-stripe {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 10px;
+      height: 3px;
+      border-radius: 0 0 3px 3px;
+      background: #3AB5F7;
+    }
+    .hud-card-badge {
+      font-family: var(--font);
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #F2C94C;
+      margin-bottom: 3px;
+    }
+    .hud-card-title {
+      font-family: var(--font);
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #FFFFFF;
+      margin: 2px 0 3px;
+      line-height: 1.2;
+    }
+    .hud-card-sub {
+      font-family: var(--font);
+      font-size: 9.5px;
+      font-weight: 500;
+      color: #94A3B8;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .hud-card-cta {
+      font-family: var(--font);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #38BDF8;
+    }
+
     /* ─── Toast Notification ──────────────────────── */
     #notification {
       position: fixed;
@@ -1463,6 +1589,14 @@
 
   <!-- ═══ UI ELEMENTS ═══════════════════════════ -->
   <div id="palette-btn" onclick="cyclePalette()" title="Cambiar Paleta de Color">🎨 Paleta [P]</div>
+  <div id="crosshair"></div>
+  <div id="hud-floating-card">
+    <div class="hud-card-top-stripe"></div>
+    <div class="hud-card-badge"></div>
+    <h3 class="hud-card-title"></h3>
+    <div class="hud-card-sub"></div>
+    <div class="hud-card-cta"></div>
+  </div>
   <div id="lock-hint">Click para capturar el mouse</div>
   <div id="notification"></div>
   <div id="transition-overlay"></div>
@@ -1844,6 +1978,6 @@
   </div>
 
   <!-- ═══ ENGINE ════════════════════════════════ -->
-  <script src="js/main.js?v=202609100335"></script>
+  <script src="js/main.js?v=202609100356"></script>
 </body>
 </html>

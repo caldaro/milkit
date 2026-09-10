@@ -1196,72 +1196,71 @@ function renderHUD() {
   hoveredScreen   = getCenterAimScreen();
   const onScreen  = !!hoveredScreen;
 
-  // ── 1. Crosshair ─────────────────────────────────
-  const cs = onScreen ? 11 : 7;
-  ctx.strokeStyle = onScreen ? '#FA61A2' : 'rgba(45, 45, 45, 0.45)';
-  ctx.lineWidth   = onScreen ? 2 : 1.2;
-  ctx.beginPath();
-  ctx.moveTo(W2-cs, H2); ctx.lineTo(W2+cs, H2);
-  ctx.moveTo(W2, H2-cs); ctx.lineTo(W2, H2+cs);
-  ctx.stroke();
+  // ── 1. Crosshair (DOM layer z-index: 140 & canvas fallback) ───
+  const crosshairEl = document.getElementById('crosshair');
+  if (crosshairEl) {
+    crosshairEl.classList.toggle('on-screen', onScreen);
+  } else {
+    const cs = onScreen ? 11 : 7;
+    ctx.strokeStyle = onScreen ? '#FA61A2' : 'rgba(45, 45, 45, 0.45)';
+    ctx.lineWidth   = onScreen ? 2 : 1.2;
+    ctx.beginPath();
+    ctx.moveTo(W2-cs, H2); ctx.lineTo(W2+cs, H2);
+    ctx.moveTo(W2, H2-cs); ctx.lineTo(W2, H2+cs);
+    ctx.stroke();
+  }
 
-  // ── 2. Label de pantalla en hover (Tarjeta flotante HUD interactiva) ────
-  if (onScreen) {
-    const scr = hoveredScreen;
+  // ── 2. Label de pantalla en hover (Tarjeta flotante HUD interactiva DOM layer z-index: 150) ────
+  const hudCardEl = document.getElementById('hud-floating-card');
+  const lockHint  = document.getElementById('lock-hint');
+
+  if (onScreen && hudCardEl) {
+    const scr    = hoveredScreen;
     const [r, g, b] = scr.rgb;
     const isFlag = !!scr.flagship;
 
-    const lW  = clamp(Math.round(scr.label.length * 9.5 + 75), 320, Math.min(560, Math.round(W * 0.88)));
-    const lH  = isFlag ? 90 : 76;
-    const lX  = W2 - lW / 2;
-    const lY  = isTouchDevice ? Math.max(H2 + 40, H - lH - 95) : (H - lH - 24);
+    const stripe = hudCardEl.querySelector('.hud-card-top-stripe');
+    const badge  = hudCardEl.querySelector('.hud-card-badge');
+    const title  = hudCardEl.querySelector('.hud-card-title');
+    const sub    = hudCardEl.querySelector('.hud-card-sub');
+    const cta    = hudCardEl.querySelector('.hud-card-cta');
 
-    ctx.fillStyle = 'rgba(8, 14, 28, 0.96)';
-    roundRect(ctx, lX, lY, lW, lH, 10);
-    ctx.fill();
+    if (stripe) stripe.style.background = isFlag ? '#F2C94C' : `rgb(${r},${g},${b})`;
 
-    ctx.strokeStyle = isFlag ? '#3AB5F7' : `rgba(${r},${g},${b},0.85)`;
-    ctx.lineWidth   = isFlag ? 2 : 1.5;
-    ctx.stroke();
-
-    // Barra superior
-    ctx.fillStyle = isFlag ? '#F2C94C' : `rgb(${r},${g},${b})`;
-    ctx.fillRect(lX + 8, lY, lW - 16, 2.5);
-
-    let curY = lY + (isFlag ? 17 : 20);
-    if (isFlag) {
-      ctx.fillStyle    = '#F2C94C';
-      ctx.font         = `700 8px 'Poppins', sans-serif`;
-      ctx.textAlign    = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('★ PRODUCTO ESTRELLA · INFRAESTRUCTURA B2B', W2, curY);
-      curY += 16;
+    if (badge) {
+      if (isFlag) {
+        badge.textContent = '★ PRODUCTO ESTRELLA · INFRAESTRUCTURA B2B';
+        badge.style.color = '#F2C94C';
+        badge.style.display = 'block';
+      } else if (scr.id === 'milkit-advisors') {
+        badge.textContent = '👥 AUDITORÍA SENIOR · GOBERNANZA';
+        badge.style.color = '#F2C94C';
+        badge.style.display = 'block';
+      } else {
+        badge.textContent = '✦ SOLUCIÓN CREATIVA MILKIT';
+        badge.style.color = '#FA61A2';
+        badge.style.display = 'block';
+      }
     }
 
-    ctx.fillStyle    = '#FFFFFF';
-    ctx.font         = `800 13.5px 'Poppins', sans-serif`;
-    ctx.textAlign    = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(scr.label, W2, curY);
-    curY += 17;
+    if (title) title.textContent = scr.label;
+    if (sub)   sub.textContent   = scr.sub;
+    if (cta) {
+      cta.textContent = `⚡ [ CLICK ]  ${scr.cta || 'explorar este espacio'}`;
+      cta.style.color = isFlag ? '#38BDF8' : `rgb(${r},${g},${b})`;
+    }
 
-    ctx.fillStyle = '#94A3B8';
-    ctx.font      = `500 9px 'Poppins', sans-serif`;
-    ctx.fillText(scr.sub, W2, curY);
-    curY += 17;
+    hudCardEl.style.borderColor = isFlag ? '#3AB5F7' : `rgba(${r},${g},${b},0.85)`;
+    hudCardEl.style.boxShadow   = `0 10px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(${r},${g},${b},0.35)`;
+    hudCardEl.classList.add('active');
 
-    ctx.fillStyle = isFlag ? '#38BDF8' : `rgb(${r},${g},${b})`;
-    ctx.font      = `700 9.5px 'Poppins', sans-serif`;
-    ctx.fillText(`⚡ [ CLICK ]  ${scr.cta || 'explorar este espacio'}`, W2, curY);
-  }
-
-  // Desvanecer el aviso inferior si la tarjeta flotante está activa para evitar colisiones
-  const lockHint = document.getElementById('lock-hint');
-  if (lockHint) {
-    if (onScreen) {
+    if (lockHint) {
       lockHint.style.opacity = '0';
       lockHint.style.pointerEvents = 'none';
-    } else if (!isPointerLocked) {
+    }
+  } else if (hudCardEl) {
+    hudCardEl.classList.remove('active');
+    if (lockHint && !isPointerLocked && !isProductViewOpen) {
       lockHint.style.opacity = '1';
       lockHint.style.pointerEvents = 'auto';
     }
@@ -1674,6 +1673,10 @@ function init() {
   document.getElementById('back-to-room-btn')?.addEventListener('click', closeProductEnvironment);
   document.getElementById('cta-demo-btn')?.addEventListener('click', () => {
     showToast('✓ Solicitud de Propuesta registrada. Abriendo canal con Milkit...');
+  });
+  document.getElementById('hud-floating-card')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (hoveredScreen) onScreenSelect(hoveredScreen);
   });
 
   // Hook virtual D-Pad buttons for mobile
