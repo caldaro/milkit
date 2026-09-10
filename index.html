@@ -194,74 +194,34 @@
       transform: translateX(-50%) translateY(4px);
     }
 
-    /* ─── Botones de Acción Superiores (HUD Top Bar) ──── */
-    #hud-top-actions {
+    /* ─── Botón Paleta de Color (Top Right) ──── */
+    #palette-btn {
       position: fixed;
-      top: 18px;
+      top: 20px;
       right: 20px;
       z-index: 120;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .hud-action-btn {
-      background: rgba(6, 12, 24, 0.90);
+      background: rgba(6, 12, 24, 0.88);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       font-family: var(--font);
-      font-size: 11.5px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.05em;
-      padding: 7px 14px;
+      letter-spacing: 0.08em;
+      padding: 8px 18px;
       border-radius: 20px;
+      border: 1.5px solid rgba(58, 181, 247, 0.5);
+      color: #38BDF8;
       cursor: pointer;
       pointer-events: auto;
       transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, color 0.2s;
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
       user-select: none;
-      white-space: nowrap;
     }
-    .hud-action-btn.markos {
-      border: 1.5px solid rgba(58, 181, 247, 0.7);
-      color: #38BDF8;
-    }
-    .hud-action-btn.markos:hover {
-      border-color: #F2C94C;
-      color: #F2C94C;
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(242, 201, 76, 0.4);
-    }
-    .hud-action-btn.services {
-      border: 1.5px solid rgba(250, 97, 162, 0.6);
-      color: #FA61A2;
-    }
-    .hud-action-btn.services:hover {
-      border-color: #38BDF8;
-      color: #38BDF8;
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(250, 97, 162, 0.4);
-    }
-    .hud-action-btn.advisors {
-      border: 1.5px solid rgba(242, 201, 76, 0.7);
-      color: #F2C94C;
-    }
-    .hud-action-btn.advisors:hover {
+    #palette-btn:hover {
       border-color: #FA61A2;
       color: #FA61A2;
       transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(242, 201, 76, 0.4);
-    }
-    .hud-action-btn.palette {
-      border: 1.5px solid rgba(148, 163, 184, 0.45);
-      color: #94A3B8;
-    }
-    .hud-action-btn.palette:hover {
-      border-color: #FFFFFF;
-      color: #FFFFFF;
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
+      box-shadow: 0 6px 24px rgba(250, 97, 162, 0.45);
     }
 
     /* ─── Transition Overlay ──────────────────────── */
@@ -1502,12 +1462,7 @@
   </div>
 
   <!-- ═══ UI ELEMENTS ═══════════════════════════ -->
-  <div id="hud-top-actions">
-    <div class="hud-action-btn markos" onclick="openProductEnvironment('markos')" title="Ver Producto Estrella MarkOS">⚡ MarkOS B2B</div>
-    <div class="hud-action-btn services" onclick="openProductEnvironment('milkit-creativas')" title="Ver Soluciones Creativas">✦ Servicios</div>
-    <div class="hud-action-btn advisors" onclick="openProductEnvironment('milkit-advisors')" title="Ver Consejo Asesor Senior">👥 Consejo Asesor</div>
-    <div class="hud-action-btn palette" id="palette-btn" onclick="cyclePalette()" title="Cambiar Paleta de Color">🎨 Paleta [P]</div>
-  </div>
+  <div id="palette-btn" onclick="cyclePalette()" title="Cambiar Paleta de Color">🎨 Paleta [P]</div>
   <div id="lock-hint">Click para capturar el mouse</div>
   <div id="notification"></div>
   <div id="transition-overlay"></div>
@@ -1889,6 +1844,6 @@
   </div>
 
   <!-- ═══ ENGINE ════════════════════════════════ -->
-  <script src="js/main.js?v=202609100328"></script>
+  <script src="js/main.js?v=202609100335"></script>
 </body>
 </html>
