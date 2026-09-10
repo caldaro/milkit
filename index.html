@@ -47,6 +47,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
+  <!-- Google Model Viewer WebGL para la Vaquita 3D -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
   <style>
     /* ─── Reset & Base ────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1436,26 +1439,27 @@
       letter-spacing: 0.08em;
     }
 
-    /* Vaquita 3D Billboard */
+    /* Vaquita 3D Billboard & Real 3D Model */
     .vaquita-3d-billboard {
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 320px;
-      height: 490px;
-      margin-left: -160px;
-      margin-top: -245px;
+      width: 360px;
+      height: 500px;
+      margin-left: -180px;
+      margin-top: -250px;
       transform-origin: 50% 50%;
       pointer-events: none;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       display: none;
     }
-    .vaquita-3d-billboard img {
+    .vaquita-3d-billboard img,
+    .vaquita-3d-billboard model-viewer {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 0 20px rgba(58, 181, 247, 0.25));
+      filter: drop-shadow(0 0 24px rgba(58, 181, 247, 0.35));
     }
   </style>
 </head>
@@ -1571,9 +1575,26 @@
         <div class="kiosk-footer">LIDERAZGO EXPERTO · AUDITORÍA CONTINUA</div>
       </div>
 
-      <!-- Vaquita 3D Billboard -->
+      <!-- Vaquita 3D Real en Pedestal -->
       <div id="css3d-vaquita" class="vaquita-3d-billboard">
-        <img src="vaquita.png" alt="Vaquita Milkit">
+        <model-viewer
+          id="vaquita-model"
+          src="assets/vaquita.glb"
+          alt="Vaquita Milkit 3D"
+          auto-rotate
+          rotation-per-second="25deg"
+          shadow-intensity="1.2"
+          shadow-softness="0.8"
+          exposure="1.15"
+          disable-zoom
+          disable-pan
+          disable-tap
+          interaction-prompt="none"
+          loading="eager"
+          style="width: 100%; height: 100%; background: transparent; pointer-events: none;"
+        >
+          <img src="vaquita.png" alt="Vaquita Milkit" slot="poster" style="width: 100%; height: 100%; object-fit: contain;">
+        </model-viewer>
       </div>
     </div>
   </div>
@@ -1978,6 +1999,6 @@
   </div>
 
   <!-- ═══ ENGINE ════════════════════════════════ -->
-  <script src="js/main.js?v=202609100356"></script>
+  <script src="js/main.js?v=202609100438"></script>
 </body>
 </html>
