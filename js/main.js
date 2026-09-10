@@ -40,6 +40,9 @@ const CFG = Object.freeze({
   // Niebla
   FOG_START:  0.30,
   FOG_END:    1.80,
+
+  // Renderizado Vectorial DOM CSS 3D (pantallas hiper-nítidas sin aliasing)
+  USE_CSS3D_SCREENS: true,
 });
 
 
@@ -737,52 +740,85 @@ function renderWalls() {
       // ══════════════════════════════════════════════
       // PANTALLA DIGITAL (Showroom Kiosk Ultra-Slim)
       // ══════════════════════════════════════════════
-      const isBezel = (hit.u < 0.025 || hit.u > 0.975);
-      
-      if (isBezel) {
-        // Marco de titanio oscuro; el producto estrella lleva bisel con filo dorado
-        if (hit.screen.flagship) {
-          ctx.fillStyle = (hit.u < 0.012 || hit.u > 0.988) ? '#F2C94C' : '#0B1120';
+      if (CFG.USE_CSS3D_SCREENS) {
+        // En modo CSS 3D, el Canvas 2D dibuja el chasis arquitectónico minimalista
+        // y el bisel de titanio sobre el que reposa la pantalla vectorial DOM interactiva.
+        const isBezel = (hit.u < 0.022 || hit.u > 0.978);
+        if (isBezel) {
+          if (hit.screen.flagship) {
+            ctx.fillStyle = (hit.u < 0.010 || hit.u > 0.990) ? '#F2C94C' : '#0B1120';
+          } else {
+            ctx.fillStyle = '#0F172A';
+          }
         } else {
-          ctx.fillStyle = '#0F172A';
+          ctx.fillStyle = hit.screen.flagship ? '#080C16' : '#0F172A';
         }
         ctx.fillRect(col, wallTop, 1, wallH);
-      } else {
-        // Pantalla interior con mapeo u
-        const innerU = (hit.u - 0.025) / (0.975 - 0.025);
-        const tex    = screenTexCache.get(hit.screen.id);
-        const texX   = clamp((innerU * TEX_W) | 0, 0, TEX_W - 1);
 
-        ctx.drawImage(tex, texX, 0, 1, TEX_H, col, wallTop, 1, wallH);
-
-        // Brillo satinado de cristal museo antirreflejo
-        const glassShine = Math.sin(innerU * Math.PI) * (hit.screen.flagship ? 0.09 : 0.06);
-        if (glassShine > 0.01) {
-          ctx.fillStyle = `rgba(255, 255, 255, ${glassShine})`;
+        // Niebla suave atmosférica
+        if (fog > 0.04) {
+          ctx.fillStyle = `rgba(203, 213, 225, ${fog * 0.45})`;
           ctx.fillRect(col, wallTop, 1, wallH);
         }
-      }
 
-      // Niebla de profundidad
-      if (fog > 0.04) {
-        ctx.fillStyle = `rgba(203, 213, 225, ${fog * 0.55})`;
-        ctx.fillRect(col, wallTop, 1, wallH);
-      }
-
-      // Halo de iluminación de la pantalla (MarkOS tiene aura eléctrica reactiva)
-      if (hit.screen.flagship) {
-        const pulse = 0.7 + 0.3 * Math.sin(performance.now() * 0.005);
-        const edgeF = 1 - clamp(Math.min(hit.u, 1 - hit.u) / 0.12, 0, 1);
-        if (edgeF > 0.01) {
-          ctx.fillStyle = `rgba(58, 181, 247, ${edgeF * 0.75 * pulse * bright})`;
-          ctx.fillRect(col, wallTop, 1, wallH);
+        // Halo perimetral sutil
+        if (hit.screen.flagship) {
+          const pulse = 0.7 + 0.3 * Math.sin(performance.now() * 0.005);
+          const edgeF = 1 - clamp(Math.min(hit.u, 1 - hit.u) / 0.10, 0, 1);
+          if (edgeF > 0.01) {
+            ctx.fillStyle = `rgba(58, 181, 247, ${edgeF * 0.35 * pulse * bright})`;
+            ctx.fillRect(col, wallTop, 1, wallH);
+          }
         }
       } else {
-        const edgeF = 1 - clamp(Math.min(hit.u, 1 - hit.u) / 0.07, 0, 1);
-        if (edgeF > 0.01) {
-          const [r, g, b] = hit.screen.rgb;
-          ctx.fillStyle = `rgba(${r},${g},${b},${edgeF * 0.35 * bright})`;
+        // Modo Canvas 2D original (fallback)
+        const isBezel = (hit.u < 0.025 || hit.u > 0.975);
+        
+        if (isBezel) {
+          // Marco de titanio oscuro; el producto estrella lleva bisel con filo dorado
+          if (hit.screen.flagship) {
+            ctx.fillStyle = (hit.u < 0.012 || hit.u > 0.988) ? '#F2C94C' : '#0B1120';
+          } else {
+            ctx.fillStyle = '#0F172A';
+          }
           ctx.fillRect(col, wallTop, 1, wallH);
+        } else {
+          // Pantalla interior con mapeo u
+          const innerU = (hit.u - 0.025) / (0.975 - 0.025);
+          const tex    = screenTexCache.get(hit.screen.id);
+          const texX   = clamp((innerU * TEX_W) | 0, 0, TEX_W - 1);
+
+          ctx.drawImage(tex, texX, 0, 1, TEX_H, col, wallTop, 1, wallH);
+
+          // Brillo satinado de cristal museo antirreflejo
+          const glassShine = Math.sin(innerU * Math.PI) * (hit.screen.flagship ? 0.09 : 0.06);
+          if (glassShine > 0.01) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${glassShine})`;
+            ctx.fillRect(col, wallTop, 1, wallH);
+          }
+        }
+
+        // Niebla de profundidad
+        if (fog > 0.04) {
+          ctx.fillStyle = `rgba(203, 213, 225, ${fog * 0.55})`;
+          ctx.fillRect(col, wallTop, 1, wallH);
+        }
+
+        // Halo de iluminación de la pantalla (MarkOS tiene aura eléctrica reactiva)
+        if (hit.screen.flagship) {
+          const pulse = 0.7 + 0.3 * Math.sin(performance.now() * 0.005);
+          const edgeF = 1 - clamp(Math.min(hit.u, 1 - hit.u) / 0.12, 0, 1);
+          if (edgeF > 0.01) {
+            ctx.fillStyle = `rgba(58, 181, 247, ${edgeF * 0.75 * pulse * bright})`;
+            ctx.fillRect(col, wallTop, 1, wallH);
+          }
+        } else {
+          const edgeF = 1 - clamp(Math.min(hit.u, 1 - hit.u) / 0.07, 0, 1);
+          if (edgeF > 0.01) {
+            const [r, g, b] = hit.screen.rgb;
+            ctx.fillStyle = `rgba(${r},${g},${b},${edgeF * 0.35 * bright})`;
+            ctx.fillRect(col, wallTop, 1, wallH);
+          }
         }
       }
 
@@ -939,22 +975,24 @@ function renderAvatarBillboard(depthBuf) {
   const breath = Math.sin(performance.now() * 0.0025) * (sprH * 0.015);
   const drawY  = sprTop - 4 + breath;
 
-  if (avatarSprite.complete && avatarSprite.naturalWidth > 0) {
-    ctx.drawImage(avatarSprite,
-      screenX - sprW / 2, drawY,
-      sprW, sprH
-    );
-  } else {
-    // Fallback: avatar estilizado
-    ctx.fillStyle   = 'rgba(250,97,162,0.9)';
-    ctx.shadowColor = '#FA61A2';
-    ctx.shadowBlur  = 16;
-    ctx.fillRect(screenX - sprW / 2, drawY, sprW, sprH);
-    ctx.shadowBlur  = 0;
-    ctx.fillStyle   = '#fff';
-    ctx.font        = `700 ${Math.round(sprH * 0.12)}px 'Poppins', sans-serif`;
-    ctx.textAlign   = 'center';
-    ctx.fillText('Milkit', screenX, drawY + sprH * 0.55);
+  if (!CFG.USE_CSS3D_SCREENS) {
+    if (avatarSprite.complete && avatarSprite.naturalWidth > 0) {
+      ctx.drawImage(avatarSprite,
+        screenX - sprW / 2, drawY,
+        sprW, sprH
+      );
+    } else {
+      // Fallback: avatar estilizado
+      ctx.fillStyle   = 'rgba(250,97,162,0.9)';
+      ctx.shadowColor = '#FA61A2';
+      ctx.shadowBlur  = 16;
+      ctx.fillRect(screenX - sprW / 2, drawY, sprW, sprH);
+      ctx.shadowBlur  = 0;
+      ctx.fillStyle   = '#fff';
+      ctx.font        = `700 ${Math.round(sprH * 0.12)}px 'Poppins', sans-serif`;
+      ctx.textAlign   = 'center';
+      ctx.fillText('Milkit', screenX, drawY + sprH * 0.55);
+    }
   }
 
   ctx.restore();
@@ -1213,6 +1251,139 @@ function update(dt) {
 
 
 // ══════════════════════════════════════════════════════
+// §14b RENDER — PROYECCIÓN VECTORIAL CSS 3D
+//      (Pantallas DOM de Ultra Alta Definición 4K)
+// ══════════════════════════════════════════════════════
+
+const CSS3D_SCREENS = [
+  { edgeIdx: 0, domId: 'css3d-screen-markos',     screenId: 'markos' },
+  { edgeIdx: 3, domId: 'css3d-screen-creativas',  screenId: 'milkit-creativas' },
+  { edgeIdx: 5, domId: 'css3d-screen-seo',        screenId: 'milkit-seo' },
+  { edgeIdx: 8, domId: 'css3d-screen-multimedia', screenId: 'milkit-multimedia' },
+];
+
+let css3dViewportEl = null;
+let css3dElements   = null;
+let css3dVaquitaEl  = null;
+
+function initCSS3DElements() {
+  css3dViewportEl = document.getElementById('css3d-viewport');
+  css3dVaquitaEl  = document.getElementById('css3d-vaquita');
+  if (!css3dViewportEl) return;
+  css3dElements = CSS3D_SCREENS.map(item => ({
+    ...item,
+    el:   document.getElementById(item.domId),
+    edge: EDGES[item.edgeIdx],
+  }));
+}
+
+function updateCSS3DScreens() {
+  if (!css3dViewportEl) initCSS3DElements();
+  if (!css3dViewportEl) return;
+
+  if (!CFG.USE_CSS3D_SCREENS) {
+    if (css3dViewportEl.style.display !== 'none') css3dViewportEl.style.display = 'none';
+    return;
+  }
+  if (css3dViewportEl.style.display === 'none') css3dViewportEl.style.display = 'block';
+
+  const projF = (W / 2) / Math.tan(CFG.FOV / 2);
+  css3dViewportEl.style.perspective = `${projF.toFixed(1)}px`;
+
+  const worldH  = (CFG.WALL_SCALE * H * CFG.ROOM_R) / projF;
+  const edgeLen = 2 * CFG.ROOM_R * Math.sin(Math.PI / CFG.SIDES);
+  const scaleX  = edgeLen / 480;
+  const scaleY  = worldH / 520;
+
+  const cosD = Math.cos(player.dir);
+  const sinD = Math.sin(player.dir);
+
+  // 1. Proyección de las 4 pantallas interactivas
+  if (css3dElements) {
+    for (const scr of css3dElements) {
+      const el = scr.el;
+      if (!el) continue;
+
+      const edge = scr.edge;
+      const mx = (edge.a.x + edge.b.x) / 2;
+      const my = (edge.a.y + edge.b.y) / 2;
+
+      const toX = mx - player.x;
+      const toY = my - player.y;
+
+      const camZ = toX * cosD + toY * sinD;
+      const camX = toY * cosD - toX * sinD;
+
+      // Culling frontal / clipping
+      if (camZ < 50) {
+        el.style.display = 'none';
+        continue;
+      }
+
+      // Culling angular (fuera de FOV)
+      const angleToScreen = Math.atan2(toY, toX);
+      const diffAngle = Math.abs(normalizeAngle(angleToScreen - player.dir));
+      if (diffAngle > (CFG.FOV / 2 + 0.38)) {
+        el.style.display = 'none';
+        continue;
+      }
+
+      // Orientación angular de la pared
+      const dx = edge.b.x - edge.a.x;
+      const dy = edge.b.y - edge.a.y;
+      const edgeAngle = Math.atan2(dy, dx);
+      const relRot = -normalizeAngle((edgeAngle - Math.PI / 2) - player.dir);
+
+      // Backface culling
+      if (Math.abs(relRot) > Math.PI / 2 + 0.15) {
+        el.style.display = 'none';
+        continue;
+      }
+
+      // Estado activo / hover
+      if (hoveredScreen && hoveredScreen.id === scr.screenId) {
+        el.classList.add('is-hovered');
+      } else {
+        el.classList.remove('is-hovered');
+      }
+
+      el.style.display   = 'flex';
+      el.style.transform = `translate3d(${camX.toFixed(2)}px, 0px, ${(projF - camZ).toFixed(2)}px) rotateY(${relRot.toFixed(4)}rad) scale(${scaleX.toFixed(4)}, ${scaleY.toFixed(4)})`;
+      el.style.zIndex    = Math.round(10000 - camZ);
+    }
+  }
+
+  // 2. Proyección de Vaquita 3D Billboard en el layer DOM
+  if (css3dVaquitaEl) {
+    const toX  = -player.x;
+    const toY  = -player.y;
+    const camZ =  toX * cosD + toY * sinD;
+    const camX =  toY * cosD - toX * sinD;
+
+    if (camZ < 40) {
+      css3dVaquitaEl.style.display = 'none';
+    } else {
+      const angleToVaq = Math.atan2(toY, toX);
+      const diffAngle  = Math.abs(normalizeAngle(angleToVaq - player.dir));
+      if (diffAngle > (CFG.FOV / 2 + 0.45)) {
+        css3dVaquitaEl.style.display = 'none';
+      } else {
+        const vaqWorldH = worldH * 0.90;
+        const vaqWorldW = vaqWorldH * 0.65;
+        const vaqScaleX = vaqWorldW / 320;
+        const vaqScaleY = vaqWorldH / 490;
+        const breath    = Math.sin(performance.now() * 0.0025) * 4;
+
+        css3dVaquitaEl.style.display   = 'block';
+        css3dVaquitaEl.style.transform = `translate3d(${camX.toFixed(2)}px, ${breath.toFixed(1)}px, ${(projF - camZ).toFixed(2)}px) scale(${vaqScaleX.toFixed(4)}, ${vaqScaleY.toFixed(4)})`;
+        css3dVaquitaEl.style.zIndex    = Math.round(10000 - camZ);
+      }
+    }
+  }
+}
+
+
+// ══════════════════════════════════════════════════════
 // §15 GAME LOOP
 // ══════════════════════════════════════════════════════
 let lastTs = 0;
@@ -1222,6 +1393,7 @@ function render() {
   renderCeilingFloor();
   const depthBuf = renderWalls();
   renderAvatarBillboard(depthBuf);
+  updateCSS3DScreens();
   renderHUD();
 }
 

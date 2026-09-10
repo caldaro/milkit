@@ -478,12 +478,277 @@
       background: var(--hot);
       color: #fff;
     }
+
+    /* ─── CSS 3D PROJECTION LAYER ───────────── */
+    #css3d-viewport {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      perspective-origin: 50% 50%;
+      z-index: 40;
+    }
+    #css3d-world {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      pointer-events: none;
+    }
+    .kiosk-screen-3d {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 500px;
+      height: 500px;
+      margin-left: -250px;
+      margin-top: -250px;
+      transform-origin: 50% 50%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 20px;
+      box-sizing: border-box;
+      padding: 28px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: auto;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .kiosk-screen-3d.is-hovered {
+      box-shadow: 0 0 55px rgba(58, 181, 247, 0.65), 0 0 110px rgba(58, 181, 247, 0.35) !important;
+      border-color: #38BDF8 !important;
+    }
+    
+    /* MarkOS Obsidian Flagship */
+    .kiosk-screen-3d.flagship {
+      background: radial-gradient(circle at 50% 0%, rgba(14, 28, 54, 0.98), rgba(6, 10, 18, 0.98) 75%);
+      border: 2.5px solid rgba(58, 181, 247, 0.85);
+      box-shadow: 0 0 35px rgba(58, 181, 247, 0.35), inset 0 0 25px rgba(58, 181, 247, 0.12);
+      color: #fff;
+    }
+    .kiosk-screen-3d.flagship .kiosk-badge {
+      align-self: center;
+      padding: 6px 18px;
+      background: rgba(242, 201, 76, 0.18);
+      border: 1.5px solid #F2C94C;
+      color: #F2C94C;
+      font-size: 13px;
+      font-weight: 800;
+      border-radius: 20px;
+      letter-spacing: 0.12em;
+    }
+    .kiosk-screen-3d.flagship .kiosk-brand {
+      text-align: center;
+      color: #38BDF8;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+    .kiosk-screen-3d.flagship .kiosk-title {
+      text-align: center;
+      font-size: 40px;
+      font-weight: 900;
+      margin: 2px 0 0;
+      letter-spacing: -0.02em;
+      background: linear-gradient(180deg, #FFFFFF 30%, #BAE6FD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .kiosk-screen-3d.flagship .kiosk-sub {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94A3B8;
+      margin-bottom: 10px;
+    }
+    .kiosk-screen-3d .kiosk-chips {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .kiosk-screen-3d.flagship .k-chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(58, 181, 247, 0.35);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #E2E8F0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .kiosk-screen-3d.flagship .k-chip span {
+      color: #38BDF8;
+      font-size: 14px;
+    }
+    .kiosk-screen-3d.flagship .kiosk-btn {
+      background: linear-gradient(90deg, #3AB5F7, #FA61A2);
+      border: none;
+      color: #fff;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 800;
+      padding: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(58, 181, 247, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kiosk-screen-3d.flagship .kiosk-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 24px rgba(250, 97, 162, 0.6);
+    }
+    .kiosk-screen-3d.flagship .kiosk-footer {
+      text-align: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.08em;
+    }
+
+    /* Pantallas Creativas / Blancas */
+    .kiosk-screen-3d.creative,
+    .kiosk-screen-3d.seo,
+    .kiosk-screen-3d.multimedia {
+      background: rgba(255, 255, 255, 0.98);
+      border: 2px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      color: #0F172A;
+    }
+    .kiosk-screen-3d .kiosk-badge.creative { background: rgba(250, 97, 162, 0.12); border: 1px solid #FA61A2; color: #FA61A2; font-size: 12px; font-weight: 800; border-radius: 20px; padding: 5px 16px; align-self: center; }
+    .kiosk-screen-3d .kiosk-badge.seo { background: rgba(144, 89, 200, 0.12); border: 1px solid #9059C8; color: #9059C8; font-size: 12px; font-weight: 800; border-radius: 20px; padding: 5px 16px; align-self: center; }
+    .kiosk-screen-3d .kiosk-badge.multimedia { background: rgba(242, 201, 76, 0.15); border: 1px solid #F2C94C; color: #B45309; font-size: 12px; font-weight: 800; border-radius: 20px; padding: 5px 16px; align-self: center; }
+    
+    .kiosk-screen-3d .kiosk-title.creative,
+    .kiosk-screen-3d .kiosk-title.seo,
+    .kiosk-screen-3d .kiosk-title.multimedia { color: #0F172A; font-size: 30px; font-weight: 800; text-align: center; margin: 4px 0 0; }
+    .kiosk-screen-3d .kiosk-sub.creative,
+    .kiosk-screen-3d .kiosk-sub.seo,
+    .kiosk-screen-3d .kiosk-sub.multimedia { color: #64748B; font-size: 13px; font-weight: 600; text-align: center; margin-bottom: 10px; }
+
+    .kiosk-screen-3d.creative .k-chip,
+    .kiosk-screen-3d.seo .k-chip,
+    .kiosk-screen-3d.multimedia .k-chip {
+      background: rgba(241, 245, 249, 0.95);
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #334155;
+    }
+    .kiosk-screen-3d.creative .kiosk-btn { background: #FA61A2; border: none; color: #fff; font-family: var(--font); font-size: 14px; font-weight: 800; padding: 13px; border-radius: 12px; cursor: pointer; }
+    .kiosk-screen-3d.seo .kiosk-btn { background: #9059C8; border: none; color: #fff; font-family: var(--font); font-size: 14px; font-weight: 800; padding: 13px; border-radius: 12px; cursor: pointer; }
+    .kiosk-screen-3d.multimedia .kiosk-btn { background: #F2C94C; border: none; color: #000; font-family: var(--font); font-size: 14px; font-weight: 800; padding: 13px; border-radius: 12px; cursor: pointer; }
+
+    /* Vaquita 3D Billboard */
+    .vaquita-3d-billboard {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 320px;
+      height: 490px;
+      margin-left: -160px;
+      margin-top: -245px;
+      transform-origin: 50% 50%;
+      pointer-events: none;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: none;
+    }
+    .vaquita-3d-billboard img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 20px rgba(58, 181, 247, 0.25));
+    }
   </style>
 </head>
 <body>
 
   <!-- ═══ WORLD CANVAS (motor de raycasting) ════ -->
   <canvas id="world"></canvas>
+
+  <!-- ═══ CSS 3D PROJECTION LAYER ════════════════ -->
+  <div id="css3d-viewport">
+    <div id="css3d-world">
+      <!-- Screen 0: MarkOS -->
+      <div id="css3d-screen-markos" class="kiosk-screen-3d flagship">
+        <div class="kiosk-badge">★ PRODUCTO ESTRELLA</div>
+        <div class="kiosk-brand">MILKIT LABS · INFRAESTRUCTURA B2B</div>
+        <h2 class="kiosk-title">MarkOS</h2>
+        <div class="kiosk-sub">Sistema Operativo de Crecimiento Comercial</div>
+        <div class="kiosk-chips">
+          <div class="k-chip"><span>⚙</span> Omni-Channel Content Engine</div>
+          <div class="k-chip"><span>◉</span> Search Dominance &amp; ADS</div>
+          <div class="k-chip"><span>◎</span> CRM &amp; Lead Orchestration</div>
+          <div class="k-chip"><span>◈</span> Data &amp; Telemetry Core</div>
+        </div>
+        <button class="kiosk-btn flagship" onclick="openProductEnvironment('markos')">⚡ DESPLEGAR MARKOS →</button>
+        <div class="kiosk-footer">● PIPELINES: 14 ▲ · CAC: -42% ▼ · UPTIME: 99.9%</div>
+      </div>
+
+      <!-- Screen 1: Milkit Creativas -->
+      <div id="css3d-screen-creativas" class="kiosk-screen-3d creative">
+        <div class="kiosk-badge creative">ESTUDIO CREATIVO</div>
+        <div class="kiosk-brand">MILKIT MULTIMEDIA</div>
+        <h2 class="kiosk-title creative">Soluciones Creativas</h2>
+        <div class="kiosk-sub">Estrategia · Branding · Contenido · Campañas 360°</div>
+        <div class="kiosk-chips">
+          <div class="k-chip"><span>●</span> Identidad Visual &amp; Manual de Marca</div>
+          <div class="k-chip"><span>●</span> Posicionamiento de Mercado</div>
+          <div class="k-chip"><span>●</span> Campañas Comerciales Integradas</div>
+          <div class="k-chip"><span>●</span> Storytelling de Alto Impacto</div>
+        </div>
+        <button class="kiosk-btn creative" onclick="openProductEnvironment('markos')">EXPLORAR ESTUDIO →</button>
+        <div class="kiosk-footer">DISPONIBILIDAD INMEDIATA · CALIDAD EMISIÓN</div>
+      </div>
+
+      <!-- Screen 2: SEO / ADS -->
+      <div id="css3d-screen-seo" class="kiosk-screen-3d seo">
+        <div class="kiosk-badge seo">GROWTH &amp; PERFORMANCE</div>
+        <div class="kiosk-brand">MILKIT ADS</div>
+        <h2 class="kiosk-title seo">SEO · Emailing · ADS</h2>
+        <div class="kiosk-sub">Embudos de Adquisición Digital de Alto Retorno</div>
+        <div class="kiosk-chips">
+          <div class="k-chip"><span>●</span> Google &amp; Meta Ads Orientados a Venta</div>
+          <div class="k-chip"><span>●</span> Email Flows Automatizados de Nutrición</div>
+          <div class="k-chip"><span>●</span> SEO Técnico &amp; Arquitectura de Nicho</div>
+          <div class="k-chip"><span>●</span> Optimización de Tasa de Conversión (CRO)</div>
+        </div>
+        <button class="kiosk-btn seo" onclick="openProductEnvironment('markos')">VER ESTRATEGIAS →</button>
+        <div class="kiosk-footer">CRECIMIENTO ESCALABLE · RETORNO MEDIBLE</div>
+      </div>
+
+      <!-- Screen 3: Multimedia / 3D -->
+      <div id="css3d-screen-multimedia" class="kiosk-screen-3d multimedia">
+        <div class="kiosk-badge multimedia">PRODUCCIÓN &amp; 3D</div>
+        <div class="kiosk-brand">MILKIT STUDIO</div>
+        <h2 class="kiosk-title multimedia">Diseño &amp; Motion 3D</h2>
+        <div class="kiosk-sub">Motion Graphics · Video Corporativo · Streaming</div>
+        <div class="kiosk-chips">
+          <div class="k-chip"><span>●</span> Animación 3D &amp; Motion Graphics</div>
+          <div class="k-chip"><span>●</span> Video Corporativo &amp; Spots Publicitarios</div>
+          <div class="k-chip"><span>●</span> Transmisiones Live Streaming Multiplataforma</div>
+          <div class="k-chip"><span>●</span> Interfaces Web React Ultra-Ligeras</div>
+        </div>
+        <button class="kiosk-btn multimedia" onclick="openProductEnvironment('markos')">EXPLORAR PRODUCCIONES →</button>
+        <div class="kiosk-footer">ESTÁNDAR CINEMATOGRÁFICO · MOTION 60FPS</div>
+      </div>
+
+      <!-- Vaquita 3D Billboard -->
+      <div id="css3d-vaquita" class="vaquita-3d-billboard">
+        <img src="vaquita.png" alt="Vaquita Milkit">
+      </div>
+    </div>
+  </div>
 
   <!-- ═══ SPLASH ════════════════════════════════ -->
   <div id="splash">
