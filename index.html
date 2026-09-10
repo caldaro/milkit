@@ -3,8 +3,35 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Mikit Multimedia · Espacio Digital Interactivo · Fase 1"/>
-  <title>Mikit Multimedia</title>
+  <title>Milkit · Soluciones Multimedia &amp; MarkOS</title>
+  <meta name="title" content="Milkit · Soluciones Multimedia &amp; MarkOS"/>
+  <meta name="description" content="Infraestructura Comercial B2B, MarkOS, Soluciones Creativas, SEO, ADS y Producción Audiovisual 3D."/>
+  <meta name="theme-color" content="#060B14"/>
+
+  <!-- Favicon & Touch Icon -->
+  <link rel="icon" type="image/png" href="https://milkit.click/logomilkit.png"/>
+  <link rel="apple-touch-icon" href="https://milkit.click/logomilkit.png"/>
+  <link rel="image_src" href="https://milkit.click/og-thumb.png"/>
+
+  <!-- Open Graph / WhatsApp / Facebook -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://milkit.click/"/>
+  <meta property="og:site_name" content="Milkit Multimedia"/>
+  <meta property="og:title" content="Milkit · Soluciones Multimedia &amp; MarkOS"/>
+  <meta property="og:description" content="Infraestructura Comercial B2B, MarkOS, Soluciones Creativas, SEO, ADS y Producción Audiovisual 3D."/>
+  <meta property="og:image" content="https://milkit.click/og-image.png"/>
+  <meta property="og:image:secure_url" content="https://milkit.click/og-image.png"/>
+  <meta property="og:image:type" content="image/png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="Milkit Multimedia Showroom Interactivo"/>
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:url" content="https://milkit.click/"/>
+  <meta name="twitter:title" content="Milkit · Soluciones Multimedia &amp; MarkOS"/>
+  <meta name="twitter:description" content="Infraestructura Comercial B2B, MarkOS, Soluciones Creativas, SEO, ADS y Producción Audiovisual 3D."/>
+  <meta name="twitter:image" content="https://milkit.click/og-image.png"/>
 
   <!-- 1 request externo: tipografía Poppins para la marca -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,8 +47,8 @@
       --hot:     #FA61A2; /* Rosa */
       --purple:  #9059C8; /* Morado */
       --yellow:  #F2C94C; /* Amarillo */
-      --bg:      #ffffff; /* Fondo Blanco */
-      --text:    #2D2D2D; /* Texto oscuro */
+      --bg:      #060B14; /* Fondo Obsidian */
+      --text:    #F8FAFC; /* Texto claro */
       --font:    'Poppins', sans-serif;
     }
 
@@ -145,6 +172,36 @@
       white-space: nowrap;
     }
     #notification.show { opacity: 1; }
+
+    /* ─── Botón Flotante de Paleta ────────────────── */
+    #palette-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 120;
+      background: rgba(6, 12, 24, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(58, 181, 247, 0.5);
+      color: #38BDF8;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+      user-select: none;
+    }
+    #palette-btn:hover {
+      border-color: #FA61A2;
+      color: #FA61A2;
+      transform: scale(1.05);
+      box-shadow: 0 6px 24px rgba(250, 97, 162, 0.4);
+    }
 
     /* ─── Transition Overlay ──────────────────────── */
     #transition-overlay {
@@ -760,6 +817,7 @@
   </div>
 
   <!-- ═══ UI ELEMENTS ═══════════════════════════ -->
+  <div id="palette-btn" onclick="cyclePalette()" title="Cambiar Paleta de Color">🎨 Paleta [P]</div>
   <div id="lock-hint">Click para capturar el mouse</div>
   <div id="notification"></div>
   <div id="transition-overlay"></div>

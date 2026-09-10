@@ -47,6 +47,67 @@ const CFG = Object.freeze({
 
 
 // ══════════════════════════════════════════════════════
+// §1b PALETAS ARQUITECTÓNICAS (Colores de marca Milkit)
+// ══════════════════════════════════════════════════════
+const WALL_PALETTES = {
+  // Tema 1 (Por defecto): Noche Cian & Obsidiana (Tecnología, contraste OLED, cero gris)
+  cyan_obsidian: {
+    name:         'Azul Cian & Obsidiana',
+    wallBase:     [10, 24, 46],               // Sombra profunda azul medianoche
+    wallGlow:     [24, 62, 114],              // Iluminación cian zafiro difusa
+    jointColor:   'rgba(58, 181, 247, 0.95)', // Juntas técnicas con neón Milkit Cyan
+    ledColor:     '#3AB5F7',                  // LED wash en el rodapié
+    corniceColor: 'rgba(58, 181, 247, 0.45)', // Cornisa superior cian
+    fogRgb:       [6, 12, 24],                // Niebla espacial oscura
+    ceil:         ['#0e1e38', '#091324', '#050914', '#020409'],
+    floor:        ['#060c18', '#081020', '#0b162c', '#050812'],
+    specular:     'rgba(58, 181, 247, 0.28)',
+    gridColor:    'rgba(58, 181, 247, 0.18)',
+  },
+  // Tema 2: Estudio Morado Eléctrico
+  electric_purple: {
+    name:         'Morado Eléctrico Milkit',
+    wallBase:     [24, 14, 46],
+    wallGlow:     [58, 30, 108],
+    jointColor:   'rgba(144, 89, 200, 0.90)',
+    ledColor:     '#FA61A2',
+    corniceColor: 'rgba(250, 97, 162, 0.45)',
+    fogRgb:       [10, 6, 20],
+    ceil:         ['#241242', '#150a28', '#0a0514', '#04020a'],
+    floor:        ['#0c0618', '#120a24', '#1a0e34', '#06030c'],
+    specular:     'rgba(144, 89, 200, 0.28)',
+    gridColor:    'rgba(250, 97, 162, 0.18)',
+  },
+  // Tema 3: Neón Magenta Creativo
+  hot_pink: {
+    name:         'Rosa / Magenta Neón',
+    wallBase:     [36, 12, 28],
+    wallGlow:     [92, 24, 68],
+    jointColor:   'rgba(250, 97, 162, 0.90)',
+    ledColor:     '#3AB5F7',
+    corniceColor: 'rgba(58, 181, 247, 0.45)',
+    fogRgb:       [18, 6, 14],
+    ceil:         ['#300d24', '#1e0717', '#0f030b', '#050104'],
+    floor:        ['#12040d', '#1a0713', '#250a1c', '#080206'],
+    specular:     'rgba(250, 97, 162, 0.28)',
+    gridColor:    'rgba(58, 181, 247, 0.18)',
+  }
+};
+
+let currentWallTheme = 'cyan_obsidian';
+
+function cyclePalette() {
+  const keys = Object.keys(WALL_PALETTES);
+  const curIdx = keys.indexOf(currentWallTheme);
+  const nextIdx = (curIdx + 1) % keys.length;
+  currentWallTheme = keys[nextIdx];
+  const p = WALL_PALETTES[currentWallTheme];
+  showToast(`Paleta: ${p.name}`);
+}
+window.cyclePalette = cyclePalette;
+
+
+// ══════════════════════════════════════════════════════
 // §2  GEOMETRÍA DODECAGONAL
 //
 //     12 vértices equidistantes, 12 aristas.
@@ -203,6 +264,7 @@ document.addEventListener('keydown', e => {
     case 'KeyS': case 'ArrowDown':  keys.s = true;  break;
     case 'KeyA': case 'ArrowLeft':  keys.a = true;  break;
     case 'KeyD': case 'ArrowRight': keys.d = true;  break;
+    case 'KeyP':                    cyclePalette(); break;
   }
   if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
 });
@@ -624,53 +686,54 @@ function initTextures() {
 // ══════════════════════════════════════════════════════
 function renderCeilingFloor() {
   const W2 = W / 2, H2 = H / 2;
-  
-  // ── 1. Techo Galería: Iluminación Cenital (Skylight / Óculo) ──
+  const theme = WALL_PALETTES[currentWallTheme] || WALL_PALETTES.cyan_obsidian;
+
+  // ── 1. Techo Galería: Cúpula Nocturna con Óculo Neón Milkit ──
   const ceilGrad = ctx.createRadialGradient(W2, H2 * 0.35, 10, W2, H2 * 0.35, Math.max(W2, H2 * 1.3));
-  ceilGrad.addColorStop(0,    '#ffffff');
-  ceilGrad.addColorStop(0.25, '#f8fafc');
-  ceilGrad.addColorStop(0.65, '#e8edf3');
-  ceilGrad.addColorStop(1,    '#d8e0e9');
+  ceilGrad.addColorStop(0,    theme.ceil[0]);
+  ceilGrad.addColorStop(0.30, theme.ceil[1]);
+  ceilGrad.addColorStop(0.70, theme.ceil[2]);
+  ceilGrad.addColorStop(1,    theme.ceil[3]);
   ctx.fillStyle = ceilGrad;
   ctx.fillRect(0, 0, W, H2);
 
-  // Anillo arquitectónico empotrado del óculo en el techo
+  // Anillo arquitectónico empotrado del óculo en el techo (Neón de Marca)
   ctx.save();
   ctx.beginPath();
   ctx.ellipse(W2, H2 * 0.42, W * 0.42, H2 * 0.26, 0, 0, Math.PI * 2);
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-  ctx.lineWidth   = 3;
+  ctx.strokeStyle = theme.ledColor;
+  ctx.lineWidth   = 2.5;
   ctx.stroke();
   ctx.beginPath();
   ctx.ellipse(W2, H2 * 0.42, W * 0.42, H2 * 0.26, 0, 0, Math.PI * 2);
-  ctx.strokeStyle = 'rgba(148, 163, 184, 0.32)';
-  ctx.lineWidth   = 1;
+  ctx.strokeStyle = theme.jointColor;
+  ctx.lineWidth   = 6;
   ctx.stroke();
   ctx.restore();
 
-  // ── 2. Piso: Microcemento Satinado Arquitectónico ────────────
+  // ── 2. Piso: Resina Obsidiana Pulida Tipo Espejo ────────────
   const floorGrad = ctx.createLinearGradient(0, H2, 0, H);
-  floorGrad.addColorStop(0,    '#cbd5e1'); // Sombra ambiental de horizonte
-  floorGrad.addColorStop(0.08, '#dfe5ec');
-  floorGrad.addColorStop(0.45, '#ecf1f6');
-  floorGrad.addColorStop(1,    '#f8fafc'); // Primer plano nítido y luminoso
+  floorGrad.addColorStop(0,    theme.floor[0]);
+  floorGrad.addColorStop(0.12, theme.floor[1]);
+  floorGrad.addColorStop(0.50, theme.floor[2]);
+  floorGrad.addColorStop(1,    theme.floor[3]);
   ctx.fillStyle = floorGrad;
   ctx.fillRect(0, H2, W, H2);
 
   // Reflejo difuso especular del óculo sobre el suelo pulido
   const floorSpec = ctx.createRadialGradient(W2, H2 + (H - H2) * 0.55, 15, W2, H2 + (H - H2) * 0.55, W * 0.65);
-  floorSpec.addColorStop(0,    'rgba(255, 255, 255, 0.55)');
-  floorSpec.addColorStop(0.35, 'rgba(58, 181, 247, 0.06)'); // Brillo etéreo Milkit Cyan
+  floorSpec.addColorStop(0,    theme.specular);
+  floorSpec.addColorStop(0.40, 'rgba(250, 97, 162, 0.08)');
   floorSpec.addColorStop(1,    'transparent');
   ctx.fillStyle = floorSpec;
   ctx.fillRect(0, H2, W, H2);
 
-  // Juntas de dilatación sutiles de la losa de microcemento (arquitectura sobria)
+  // Juntas luminosas de perspectiva sobre el piso obsidiana
   ctx.save();
   const slabLevels = [0.25, 0.48, 0.72, 0.94];
   slabLevels.forEach(p => {
     const y = H2 + (p ** 2.1) * H2;
-    ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+    ctx.strokeStyle = theme.gridColor;
     ctx.lineWidth   = 1;
     ctx.beginPath();
     ctx.moveTo(0, y);
@@ -678,10 +741,9 @@ function renderCeilingFloor() {
     ctx.stroke();
   });
 
-  // 4 juntas longitudinales mínimas de perspectiva arquitectónica
   const colOffsets = [-0.62, -0.22, 0.22, 0.62];
   colOffsets.forEach(off => {
-    ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+    ctx.strokeStyle = theme.gridColor;
     ctx.lineWidth   = 1;
     ctx.beginPath();
     ctx.moveTo(W2 + off * W * 0.15, H2);
@@ -691,7 +753,7 @@ function renderCeilingFloor() {
 
   // Oclusión ambiental horizontal en el zócalo de fondo
   const aoGrad = ctx.createLinearGradient(0, H2, 0, H2 + 24);
-  aoGrad.addColorStop(0, 'rgba(30, 41, 59, 0.14)');
+  aoGrad.addColorStop(0, 'rgba(0, 0, 0, 0.45)');
   aoGrad.addColorStop(1, 'transparent');
   ctx.fillStyle = aoGrad;
   ctx.fillRect(0, H2, W, 24);
@@ -757,7 +819,9 @@ function renderWalls() {
 
         // Niebla suave atmosférica
         if (fog > 0.04) {
-          ctx.fillStyle = `rgba(203, 213, 225, ${fog * 0.45})`;
+          const theme = WALL_PALETTES[currentWallTheme] || WALL_PALETTES.cyan_obsidian;
+          const [fr, fg, fb] = theme.fogRgb;
+          ctx.fillStyle = `rgba(${fr}, ${fg}, ${fb}, ${fog * 0.45})`;
           ctx.fillRect(col, wallTop, 1, wallH);
         }
 
@@ -800,7 +864,9 @@ function renderWalls() {
 
         // Niebla de profundidad
         if (fog > 0.04) {
-          ctx.fillStyle = `rgba(203, 213, 225, ${fog * 0.55})`;
+          const theme = WALL_PALETTES[currentWallTheme] || WALL_PALETTES.cyan_obsidian;
+          const [fr, fg, fb] = theme.fogRgb;
+          ctx.fillStyle = `rgba(${fr}, ${fg}, ${fb}, ${fog * 0.55})`;
           ctx.fillRect(col, wallTop, 1, wallH);
         }
 
@@ -824,41 +890,42 @@ function renderWalls() {
 
     } else {
       // ══════════════════════════════════════════════
-      // PARED ARQUITECTÓNICA (Panel modular blanco museo)
+      // PARED ARQUITECTÓNICA (Panel modular con color de la paleta Milkit)
       // ══════════════════════════════════════════════
-      const edgeTone = (hit.edge.idx % 2 === 0) ? 1.0 : 0.93;
+      const theme    = WALL_PALETTES[currentWallTheme] || WALL_PALETTES.cyan_obsidian;
+      const edgeTone = (hit.edge.idx % 2 === 0) ? 1.0 : 0.88;
       const lf       = diffuse * edgeTone;
-      const rVal     = Math.round(246 * lf);
-      const gVal     = Math.round(248 * lf);
-      const bVal     = Math.round(250 * lf);
 
-      // Junta de dilatación vertical (Shadow Gap entre paneles de 12 lados)
+      const rVal = Math.round(theme.wallBase[0] + (theme.wallGlow[0] - theme.wallBase[0]) * lf);
+      const gVal = Math.round(theme.wallBase[1] + (theme.wallGlow[1] - theme.wallBase[1]) * lf);
+      const bVal = Math.round(theme.wallBase[2] + (theme.wallGlow[2] - theme.wallBase[2]) * lf);
+
+      // Junta de dilatación vertical (Línea técnica de neón arquitectónica entre paneles)
       const isJoint = (hit.u < 0.016 || hit.u > 0.984);
       if (isJoint) {
-        ctx.fillStyle = 'rgba(30, 41, 59, 0.45)'; // Hendidura técnica arquitectónica
+        ctx.fillStyle = theme.jointColor;
         ctx.fillRect(col, wallTop, 1, wallH);
       } else {
         ctx.fillStyle = `rgb(${rVal},${gVal},${bVal})`;
         ctx.fillRect(col, wallTop, 1, wallH);
       }
 
-      // Cornisa superior (remate minimalista con sombra)
+      // Cornisa superior (remate minimalista con luz de acento)
       const cHeight = Math.max(2, Math.round(wallH * 0.022));
-      ctx.fillStyle = 'rgba(30, 41, 59, 0.35)';
+      ctx.fillStyle = theme.corniceColor;
       ctx.fillRect(col, wallTop, 1, cHeight);
 
-      // Zócalo empotrado moderno con luz indirecta LED
+      // Zócalo empotrado moderno con luz indirecta LED Milkit
       const bHeight = Math.max(3, Math.round(wallH * 0.045));
-      // Baseboard oscuro
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.65)';
+      ctx.fillStyle = '#050A14';
       ctx.fillRect(col, wallTop + wallH - bHeight, 1, bHeight);
-      // Fila de LED rehundido (indirect wash light)
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.fillRect(col, wallTop + wallH - bHeight, 1, 1.5);
+      ctx.fillStyle = theme.ledColor;
+      ctx.fillRect(col, wallTop + wallH - bHeight, 1, 2);
 
       // Niebla hacia el fondo
       if (fog > 0.01) {
-        ctx.fillStyle = `rgba(203, 213, 225, ${fog})`;
+        const [fr, fg, fb] = theme.fogRgb;
+        ctx.fillStyle = `rgba(${fr}, ${fg}, ${fb}, ${fog * 0.85})`;
         ctx.fillRect(col, wallTop, 1, wallH);
       }
     }
